@@ -1,5 +1,9 @@
 # Sysgreet
 
+[![Release](https://img.shields.io/github/v/release/veteranbv/sysgreet)](https://github.com/veteranbv/sysgreet/releases/latest)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/veteranbv/sysgreet)](https://golang.org/dl/)
+[![License](https://img.shields.io/github/license/veteranbv/sysgreet)](LICENSE)
+
 > Beautiful, low-latency system context for every terminal login.
 
 ![Sysgreet](media/sysgreet-padded.png)
