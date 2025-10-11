@@ -32,10 +32,10 @@ func TestBinaryExecution(t *testing.T) {
 		wantEmpty    bool
 	}{
 		{
-			name:         "disable flag produces no output",
-			args:         []string{"--disable"},
-			wantEmpty:    true,
-			wantErr:      false,
+			name:      "disable flag produces no output",
+			args:      []string{"--disable"},
+			wantEmpty: true,
+			wantErr:   false,
 		},
 		{
 			name:         "default execution produces output",
@@ -57,8 +57,8 @@ func TestBinaryExecution(t *testing.T) {
 			name: "disable specific sections",
 			args: []string{},
 			env: map[string]string{
-				"SYSGREET_DISPLAY_UPTIME":  "false",
-				"SYSGREET_DISPLAY_MEMORY":  "false",
+				"SYSGREET_DISPLAY_UPTIME": "false",
+				"SYSGREET_DISPLAY_MEMORY": "false",
 			},
 			wantErr:   false,
 			wantEmpty: false,

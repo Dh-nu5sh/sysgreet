@@ -11,8 +11,8 @@ import (
 	"time"
 )
 
-// ErrUserCancelled indicates the user chose to cancel during an interactive prompt.
-var ErrUserCancelled = errors.New("sysgreet bootstrap cancelled by user")
+// ErrUserCanceled indicates the user chose to cancel during an interactive prompt.
+var ErrUserCanceled = errors.New("sysgreet bootstrap canceled by user")
 
 // Action describes what happened during bootstrap.
 type Action string
@@ -156,7 +156,7 @@ func handlePromptOverwrite(ctx context.Context, cfgPath string, ioCfg IO, result
 		return overwriteConfig(ctx, cfgPath, ioCfg.Stderr, result, now)
 	case PromptCancel:
 		result.Action = ActionSkipped
-		return result, ErrUserCancelled
+		return result, ErrUserCanceled
 	default:
 		return result, fmt.Errorf("bootstrap: unknown prompt decision %s", outcome.Decision)
 	}

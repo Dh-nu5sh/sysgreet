@@ -46,7 +46,7 @@ func (DefaultSystemCollector) CollectSystem(ctx context.Context) (SystemInfo, er
 		OS:          osName,
 		OSVersion:   info.PlatformVersion,
 		Arch:        runtime.GOARCH,
-		Uptime:      time.Duration(uptime) * time.Second,
+		Uptime:      time.Duration(uptime) * time.Second, //nolint:gosec // G115: Overflow protected above (capped at max int64)
 		CurrentUser: currentUser,
 		HomeDir:     homeDir,
 		Datetime:    time.Now(),
@@ -56,15 +56,24 @@ func (DefaultSystemCollector) CollectSystem(ctx context.Context) (SystemInfo, er
 func prettyOS(platform, family, raw string) string {
 	parts := []string{}
 	if platform != "" {
-		parts = append(parts, strings.Title(platform))
+		parts = append(parts, titleCase(platform))
 	} else if raw != "" {
-		parts = append(parts, strings.Title(raw))
+		parts = append(parts, titleCase(raw))
 	}
 	if family != "" && !strings.EqualFold(platform, family) {
-		parts = append(parts, strings.Title(family))
+		parts = append(parts, titleCase(family))
 	}
 	if len(parts) == 0 {
-		return strings.Title(raw)
+		return titleCase(raw)
 	}
 	return strings.Join(parts, " ")
+}
+
+// titleCase converts the first character of a string to uppercase.
+// This is a simple ASCII-only replacement for deprecated strings.Title.
+func titleCase(s string) string {
+	if s == "" {
+		return s
+	}
+	return strings.ToUpper(s[:1]) + strings.ToLower(s[1:])
 }

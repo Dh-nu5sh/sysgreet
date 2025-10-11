@@ -84,7 +84,7 @@ func main() {
 	cfgPath := config.DefaultWritePath()
 	if cfgPath != "" {
 		if _, err := bootstrap.Bootstrap(ctx, cfgPath, bootstrap.IO{Stdin: os.Stdin, Stdout: os.Stdout, Stderr: os.Stderr}, bootstrap.Options{FlagPolicy: *policyFlag, EnvPolicy: policyEnv, Interactive: interactive}); err != nil {
-			if errors.Is(err, bootstrap.ErrUserCancelled) {
+			if errors.Is(err, bootstrap.ErrUserCanceled) {
 				return
 			}
 			fmt.Fprintf(os.Stderr, "sysgreet: %v\n", err)

@@ -78,22 +78,22 @@ type Snapshot struct {
 	LastLogin *LastLoginInfo
 }
 
-// SystemCollector defines host identity collection behaviour.
+// SystemCollector defines host identity collection behavior.
 type SystemCollector interface {
 	CollectSystem(ctx context.Context) (SystemInfo, error)
 }
 
-// NetworkCollector defines network snapshot behaviour.
+// NetworkCollector defines network snapshot behavior.
 type NetworkCollector interface {
 	CollectNetwork(ctx context.Context) (NetworkInfo, error)
 }
 
-// ResourceCollector defines resource metrics behaviour.
+// ResourceCollector defines resource metrics behavior.
 type ResourceCollector interface {
 	CollectResources(ctx context.Context) (ResourceInfo, error)
 }
 
-// SessionCollector defines remote session detection behaviour.
+// SessionCollector defines remote session detection behavior.
 type SessionCollector interface {
 	CollectSession(ctx context.Context) (SessionInfo, error)
 }
@@ -186,7 +186,7 @@ func DemoSnapshot() Snapshot {
 		},
 		Resources: ResourceInfo{
 			Memory: MemoryInfo{
-				Total:     16 * 1024 * 1024 * 1024,  // 16 GB
+				Total:     16 * 1024 * 1024 * 1024,           // 16 GB
 				Available: 12*1024*1024*1024 + 300*1024*1024, // 12.3 GB
 			},
 			Disk: DiskInfo{
