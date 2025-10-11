@@ -6,6 +6,9 @@ CLAUDE.md
 .specify/
 specs/
 
+# Local release notes
+RELEASE.md
+
 # Go build artifacts
 bin/
 sysgreet
