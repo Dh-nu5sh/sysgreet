@@ -65,6 +65,19 @@ export PATH="$HOME/go/bin:$PATH"
 > _Tip:_ The binary runs entirely offline. Copy it between hosts without
 > worrying about external assets.
 
+### Update to latest version
+
+```bash
+# Via Go (silent on success)
+go install github.com/veteranbv/sysgreet/cmd/sysgreet@latest
+
+# Verify the update
+sysgreet --version
+
+# Or download the latest release
+# https://github.com/veteranbv/sysgreet/releases
+```
+
 ### Wire into your shell
 
 | Shell            | Snippet                                                                                       |

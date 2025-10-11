@@ -15,10 +15,22 @@ import (
 	"github.com/veteranbv/sysgreet/internal/render"
 )
 
+var (
+	version = "dev"
+	commit  = "none"
+	date    = "unknown"
+)
+
 func main() {
 	ctx := context.Background()
 
 	settings := parseFlags()
+
+	if settings.Version {
+		fmt.Printf("sysgreet %s (commit: %s, built: %s)\n", version, commit, date)
+		return
+	}
+
 	policyEnv := os.Getenv("SYSGREET_CONFIG_POLICY")
 	interactive := resolveInteractivity()
 	if settings.Disable {
@@ -90,6 +102,7 @@ type runSettings struct {
 	Disable    bool
 	Demo       bool
 	Text       string
+	Version    bool
 }
 
 func parseFlags() runSettings {
@@ -97,6 +110,7 @@ func parseFlags() runSettings {
 	disable := flag.Bool("disable", false, "Disable sysgreet output")
 	demo := flag.Bool("demo", false, "Demo mode with 'SYSGREET' banner and fake data")
 	text := flag.String("text", "", "Render custom text as ASCII art (e.g., --text \"Tea Pot\")")
+	showVersion := flag.Bool("version", false, "Show version information")
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s\n", os.Args[0])
 		flag.PrintDefaults()
@@ -114,6 +128,7 @@ func parseFlags() runSettings {
 		Disable:    *disable,
 		Demo:       *demo,
 		Text:       *text,
+		Version:    *showVersion,
 	}
 }
 
