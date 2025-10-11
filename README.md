@@ -98,12 +98,16 @@ sysgreet --version
 # Demo mode - show 'SYSGREET' with fake data (perfect for screenshots)
 sysgreet --demo
 
-# Text mode - render custom ASCII art
-sysgreet --text "Production DB"
-
 # Disable output (useful in CI/scripts)
 sysgreet --disable
+
+# Text mode - render any custom ASCII art on the fly
+sysgreet --text "Production DB"
+sysgreet --text "Coffee Break"
+sysgreet --text "Deploy Day"
 ```
+
+> **Tip:** Use `--text` to create custom banners for different environments, reminders, or just for fun. Great for distinguishing production boxes, marking maintenance windows, or adding personality to your terminals.
 
 ![Text mode example](media/text.png)
 
