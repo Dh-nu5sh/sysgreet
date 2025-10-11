@@ -66,8 +66,8 @@ func TestBootstrapCreatesDefaultConfig(t *testing.T) {
 		t.Fatalf("yaml.Unmarshal: %v", err)
 	}
 
-	if cfg.ASCII.Font != "slant" {
-		t.Fatalf("expected ascii.font=slant, got %q", cfg.ASCII.Font)
+	if cfg.ASCII.Font != "ANSI Regular" {
+		t.Fatalf("expected ascii.font=ANSI Regular, got %q", cfg.ASCII.Font)
 	}
 
 	if cfg.Version == "" {

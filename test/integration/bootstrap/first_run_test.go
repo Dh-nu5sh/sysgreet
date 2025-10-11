@@ -67,8 +67,8 @@ func TestFirstRunCreatesConfig(t *testing.T) {
 	if err := yaml.Unmarshal(raw, &parsed); err != nil {
 		t.Fatalf("yaml parse: %v", err)
 	}
-	if parsed.ASCII.Font != "slant" {
-		t.Fatalf("expected ascii font slant, got %q", parsed.ASCII.Font)
+	if parsed.ASCII.Font != "ANSI Regular" {
+		t.Fatalf("expected ascii font ANSI Regular, got %q", parsed.ASCII.Font)
 	}
 	if parsed.Version == "" {
 		t.Fatalf("expected version to be set")

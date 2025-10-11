@@ -61,8 +61,8 @@ func TestOverwritePromptFlows(t *testing.T) {
 	if err != nil {
 		t.Fatalf("read config: %v", err)
 	}
-	if !strings.Contains(string(content), "slant") {
-		t.Fatalf("expected overwrite to set slant font, got %s", content)
+	if !strings.Contains(string(content), "ANSI Regular") {
+		t.Fatalf("expected overwrite to set ANSI Regular font, got %s", content)
 	}
 	matches, err = filepath.Glob(filepath.Join(cfgDir, "config.yaml.bak-*"))
 	if err != nil {

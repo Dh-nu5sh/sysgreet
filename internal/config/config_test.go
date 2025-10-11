@@ -19,8 +19,8 @@ func TestLoad_DefaultsWhenNoFile(t *testing.T) {
 	if cfg.Layout.Compact != def.Layout.Compact || len(cfg.Layout.Sections) != len(def.Layout.Sections) {
 		t.Fatalf("expected defaults, got %+v", cfg)
 	}
-	if cfg.ASCII.Font != "slant" {
-		t.Fatalf("expected slant font by default, got %s", cfg.ASCII.Font)
+	if cfg.ASCII.Font != "ANSI Regular" {
+		t.Fatalf("expected ANSI Regular font by default, got %s", cfg.ASCII.Font)
 	}
 	if cfg.Version != SchemaVersion {
 		t.Fatalf("expected schema version %s, got %s", SchemaVersion, cfg.Version)
@@ -40,7 +40,7 @@ func TestLoad_YAMLOverrides(t *testing.T) {
 	content := []byte(`display:
   hostname: false
 ascii:
-  font: "slant"
+  font: "standard"
 network:
   max_interfaces: 1
 version: v42
@@ -60,7 +60,7 @@ created_at: 2024-01-01T00:00:00Z
 	if cfg.Display.Hostname {
 		t.Fatalf("expected hostname disabled")
 	}
-	if cfg.ASCII.Font != "slant" {
+	if cfg.ASCII.Font != "standard" {
 		t.Fatalf("expected font override, got %s", cfg.ASCII.Font)
 	}
 	if cfg.Network.MaxInterfaces != 1 {
