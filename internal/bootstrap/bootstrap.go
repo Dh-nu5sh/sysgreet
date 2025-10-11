@@ -95,7 +95,8 @@ func Bootstrap(ctx context.Context, cfgPath string, ioCfg IO, opts Options) (Res
 		return handleExistingConfig(ctx, cfgPath, ioCfg, result, resolution.Value, now)
 	}
 
-	if statErr != nil && !errors.Is(statErr, fs.ErrNotExist) {
+	// statErr is non-nil here; check if it's something other than "not exists"
+	if !errors.Is(statErr, fs.ErrNotExist) {
 		return result, fmt.Errorf("bootstrap: stat config: %w", statErr)
 	}
 
