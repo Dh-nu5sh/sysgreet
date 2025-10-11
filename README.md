@@ -30,6 +30,8 @@ instantly answered three questions:
 Sysgreet delivers those answers in under 50 ms without calling out to the
 network or depending on external runtimes.
 
+![Home Lab Example](media/homelab_server_example.jpg)
+
 ---
 
 ## Highlights
@@ -110,7 +112,7 @@ sysgreet --text "Deploy Day"
 > **Tip:** Use `--text` to create custom banners for different environments, reminders, or just for fun. Great for distinguishing production boxes, marking maintenance windows, or adding personality to your terminals.
 
 ![Text mode example](media/text.png)
-
+![Winning](media/test-winning.png)
 ---
 
 ## Configuration (optional)
