@@ -71,8 +71,18 @@ go install github.com/veteranbv/sysgreet/cmd/sysgreet@latest
 | Windows Terminal | Add `sysgreet` to your profile script so it runs after each session attaches                  |
 | SSH `ForceCommand` | `ForceCommand /usr/local/bin/sysgreet && /bin/bash` (keeps banner even when no profile runs) |
 
-Need to silence the banner temporarily? Use `sysgreet --disable` in CI jobs or
-scripts that call the shell non-interactively.
+**Special modes:**
+
+```bash
+# Demo mode - show 'SYSGREET' with fake data (perfect for screenshots)
+sysgreet --demo
+
+# Text mode - render custom ASCII art
+sysgreet --text "Production DB"
+
+# Disable output (useful in CI/scripts)
+sysgreet --disable
+```
 
 ---
 

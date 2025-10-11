@@ -7,28 +7,31 @@ This reference output documents the constitutional gates enforced by the Sysgree
 - ✅ Single-binary Go CLI (no external runtime dependencies)
 - ✅ Cross-platform parity (Linux, macOS, Windows collectors tested)
 - ✅ Startup < 50ms measured via `go test -bench Startup ./test/benchmarks`
-- ✅ Colorful ASCII output with monochrome fallback
+- ✅ Unicode block ASCII art with gradient colors and monochrome fallback
 - ✅ Offline operation with embedded assets and configuration defaults
 
-## Sample Output (mock data)
+## Sample Output (demo mode)
 
-```ascii
- _   _           _   _        __ _
-| | | | ___  ___| |_(_) ___  / _(_) __ _ _ __ ___
-| |_| |/ _ \/ __| __| |/ __|| |_| |/ _` | '_ ` _ \
-|  _  |  __/\__ \ |_| | (__ |  _| | (_| | | | | | |
-|_| |_|\___||___/\__|_|\___||_| |_|\__,_|_| |_| |_|
+Run `sysgreet --demo` to see the default output with fake data:
 
-Linux 6.8.0 (x86_64)
+```text
+███████ ██    ██ ███████  ██████  ██████  ███████ ███████ ████████
+██       ██  ██  ██      ██       ██   ██ ██      ██         ██
+███████   ████   ███████ ██   ███ ██████  █████   █████      ██
+     ██    ██         ██ ██    ██ ██   ██ ██      ██         ██
+███████    ██    ███████  ██████  ██   ██ ███████ ███████    ██
+
+Linux Server 6.8.0 (x86_64)
 
 System
   Uptime: 4d 12h 33m
-  User: alice /home/alice
-  Time: Fri, 10 Oct 2025 09:45:00 PDT
+  User: demo /home/demo
+  Time: Sat, 11 Oct 2025 14:32:13 EDT
+  Last login: Sat, 11 Oct 2025 12:32:13 EDT (203.0.113.10)
 
 Network
-  Primary: 192.168.1.42 (en0)
-  Secondary: 10.8.0.2 (utun2)
+  Primary: 192.168.1.42 (eth0)
+  Secondary: 10.8.0.2 (tun0)
   Remote: 203.0.113.5
 
 Resources
@@ -36,5 +39,7 @@ Resources
   Disk: 210.0GB used / 512.0GB (41% used)
   CPU Load: 0.45 0.52 0.60
 ```
+
+Note: The banner uses ANSI Regular font with a blue-to-white gradient (brightblue → blue → cyan → brightcyan → white).
 
 Use this snapshot for QA validation and regression testing until golden files are finalized.

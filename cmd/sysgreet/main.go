@@ -21,6 +21,7 @@ func main() {
 	policyFlag := flag.String("config-policy", "", "Config bootstrap policy: prompt, keep, or overwrite")
 	disable := flag.Bool("disable", false, "Disable sysgreet output")
 	demo := flag.Bool("demo", false, "Demo mode with 'SYSGREET' banner and fake data")
+	text := flag.String("text", "", "Render custom text as ASCII art (e.g., --text \"Tea Pot\")")
 	flag.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s\n", os.Args[0])
 		flag.PrintDefaults()
@@ -49,6 +50,18 @@ func main() {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "sysgreet: %v\n", err)
 		os.Exit(1)
+	}
+
+	// Text mode: render custom ASCII art only
+	if *text != "" {
+		cfg := config.Default()
+		art, _, _, err := renderer.RenderWithGradient(*text, cfg.ASCII.Font, cfg.ASCII.Color, cfg.ASCII.Gradient, cfg.ASCII.Monochrome)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "sysgreet: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Printf("\n%s\n\n", art)
+		return
 	}
 
 	// Demo mode: use fake data and default config

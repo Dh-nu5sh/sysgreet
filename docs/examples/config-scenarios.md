@@ -1,5 +1,17 @@
 # Configuration Scenarios
 
+## Default Configuration (Gradient Colors)
+
+```yaml
+ascii:
+  font: "ANSI Regular"
+  gradient: ["brightblue", "blue", "cyan", "brightcyan", "white"]
+  monochrome: false
+
+display:
+  # All sections enabled by default
+```
+
 ## Minimal Configuration (disable resources)
 
 ```yaml
@@ -9,8 +21,8 @@ display:
   load: false
 
 ascii:
-  font: "standard"
-  color: "cyan"
+  font: "ANSI Regular"
+  gradient: ["cyan", "blue"]  # Simple 2-color gradient
 ```
 
 ## Focus on Networking Only
