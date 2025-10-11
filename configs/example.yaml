@@ -1,4 +1,4 @@
-# Default Hostinfo configuration (YAML)
+# Default Sysgreet configuration (YAML)
 display:
   hostname: true
   os: true

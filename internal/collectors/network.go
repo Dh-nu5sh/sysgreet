@@ -3,7 +3,7 @@ package collectors
 import (
 	"context"
 
-	"github.com/veteranbv/hostinfo/internal/network"
+	"github.com/veteranbv/sysgreet/internal/network"
 )
 
 // DefaultNetworkCollector gathers address information via gopsutil.

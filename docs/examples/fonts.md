@@ -1,6 +1,6 @@
 # Embedded FIGlet Fonts
 
-The Hostinfo banner embeds two FIGlet fonts to ensure the CLI operates offline:
+The Sysgreet banner embeds two FIGlet fonts to ensure the CLI operates offline:
 
 - `standard.flf`
 - `slant.flf`

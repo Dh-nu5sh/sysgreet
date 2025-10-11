@@ -1,5 +1,8 @@
 # Core tooling directories
 .codex/
+AGENTS.md
+.claude/
+CLAUDE.md
 .specify/
 specs/
 

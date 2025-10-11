@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"math"
 
-	"github.com/veteranbv/hostinfo/internal/collectors"
-	"github.com/veteranbv/hostinfo/internal/config"
+	"github.com/veteranbv/sysgreet/internal/collectors"
+	"github.com/veteranbv/sysgreet/internal/config"
 )
 
 // ResourceSectionBuilder renders memory/disk/CPU information.

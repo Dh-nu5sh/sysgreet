@@ -1,5 +1,7 @@
 package config
 
+const SchemaVersion = "v1"
+
 // DisplayConfig controls section visibility in the banner.
 type DisplayConfig struct {
 	Hostname    bool `yaml:"hostname" toml:"hostname"`
@@ -34,12 +36,14 @@ type NetworkConfig struct {
 	MaxInterfaces      int  `yaml:"max_interfaces" toml:"max_interfaces"`
 }
 
-// Config is the root configuration for hostinfo.
+// Config is the root configuration for sysgreet.
 type Config struct {
-	Display DisplayConfig `yaml:"display" toml:"display"`
-	ASCII   ASCIIConfig   `yaml:"ascii" toml:"ascii"`
-	Layout  LayoutConfig  `yaml:"layout" toml:"layout"`
-	Network NetworkConfig `yaml:"network" toml:"network"`
+	Display   DisplayConfig `yaml:"display" toml:"display"`
+	ASCII     ASCIIConfig   `yaml:"ascii" toml:"ascii"`
+	Layout    LayoutConfig  `yaml:"layout" toml:"layout"`
+	Network   NetworkConfig `yaml:"network" toml:"network"`
+	Version   string        `yaml:"version" toml:"version"`
+	CreatedAt string        `yaml:"created_at" toml:"created_at"`
 }
 
 // Default returns the default configuration used when no config file is present.
@@ -59,7 +63,7 @@ func Default() Config {
 			LastLogin:   true,
 		},
 		ASCII: ASCIIConfig{
-			Font:       "random",
+			Font:       "slant",
 			Color:      "random",
 			Monochrome: false,
 		},
@@ -71,5 +75,7 @@ func Default() Config {
 			ShowInterfaceNames: true,
 			MaxInterfaces:      3,
 		},
+		Version:   SchemaVersion,
+		CreatedAt: "",
 	}
 }

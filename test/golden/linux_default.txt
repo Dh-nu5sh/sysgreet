@@ -1,4 +1,4 @@
-HOSTINFO
+SYSGREET
 System
   Uptime: 4d 12h 30m
   User: alice /home/alice

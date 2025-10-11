@@ -4,10 +4,10 @@ import (
 	"context"
 	"testing"
 
-	"github.com/veteranbv/hostinfo/internal/ascii"
-	"github.com/veteranbv/hostinfo/internal/banner"
-	"github.com/veteranbv/hostinfo/internal/collectors"
-	"github.com/veteranbv/hostinfo/internal/config"
+	"github.com/veteranbv/sysgreet/internal/ascii"
+	"github.com/veteranbv/sysgreet/internal/banner"
+	"github.com/veteranbv/sysgreet/internal/collectors"
+	"github.com/veteranbv/sysgreet/internal/config"
 )
 
 // BenchmarkStartup is a high-level benchmark that builds a banner using stub collectors.

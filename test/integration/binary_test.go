@@ -12,12 +12,12 @@ import (
 func TestBinaryExecution(t *testing.T) {
 	// Build the binary for testing
 	tmpDir := t.TempDir()
-	binaryPath := filepath.Join(tmpDir, "hostinfo")
+	binaryPath := filepath.Join(tmpDir, "sysgreet")
 	if testing.Short() {
 		t.Skip("skipping binary build in short mode")
 	}
 
-	buildCmd := exec.Command("go", "build", "-o", binaryPath, "../../cmd/hostinfo")
+	buildCmd := exec.Command("go", "build", "-o", binaryPath, "../../cmd/sysgreet")
 	buildOutput, err := buildCmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("failed to build binary: %v\nOutput: %s", err, buildOutput)
@@ -48,7 +48,7 @@ func TestBinaryExecution(t *testing.T) {
 			name: "monochrome mode",
 			args: []string{},
 			env: map[string]string{
-				"HOSTINFO_ASCII_MONOCHROME": "true",
+				"SYSGREET_ASCII_MONOCHROME": "true",
 			},
 			wantErr:   false,
 			wantEmpty: false,
@@ -57,8 +57,8 @@ func TestBinaryExecution(t *testing.T) {
 			name: "disable specific sections",
 			args: []string{},
 			env: map[string]string{
-				"HOSTINFO_DISPLAY_UPTIME":  "false",
-				"HOSTINFO_DISPLAY_MEMORY":  "false",
+				"SYSGREET_DISPLAY_UPTIME":  "false",
+				"SYSGREET_DISPLAY_MEMORY":  "false",
 			},
 			wantErr:   false,
 			wantEmpty: false,
@@ -67,7 +67,7 @@ func TestBinaryExecution(t *testing.T) {
 			name: "compact layout",
 			args: []string{},
 			env: map[string]string{
-				"HOSTINFO_LAYOUT_COMPACT": "true",
+				"SYSGREET_LAYOUT_COMPACT": "true",
 			},
 			wantErr:      false,
 			wantContains: []string{"|"}, // Compact mode uses pipe separator
@@ -78,8 +78,12 @@ func TestBinaryExecution(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			cmd := exec.Command(binaryPath, tt.args...)
 
+			// Use temp config to avoid prompts
+			testConfigPath := filepath.Join(tmpDir, "test-config.yaml")
+
 			// Set environment variables
 			cmd.Env = os.Environ()
+			cmd.Env = append(cmd.Env, "SYSGREET_CONFIG="+testConfigPath, "CI=1", "SYSGREET_CONFIG_POLICY=overwrite")
 			for k, v := range tt.env {
 				cmd.Env = append(cmd.Env, k+"="+v)
 			}
@@ -129,9 +133,9 @@ func TestBinaryStartupTime(t *testing.T) {
 
 	// Build the binary for testing
 	tmpDir := t.TempDir()
-	binaryPath := filepath.Join(tmpDir, "hostinfo")
+	binaryPath := filepath.Join(tmpDir, "sysgreet")
 
-	buildCmd := exec.Command("go", "build", "-o", binaryPath, "../../cmd/hostinfo")
+	buildCmd := exec.Command("go", "build", "-o", binaryPath, "../../cmd/sysgreet")
 	if err := buildCmd.Run(); err != nil {
 		t.Fatalf("failed to build binary: %v", err)
 	}
@@ -167,9 +171,9 @@ func TestBinaryWithInvalidConfig(t *testing.T) {
 
 	// Build the binary
 	tmpDir := t.TempDir()
-	binaryPath := filepath.Join(tmpDir, "hostinfo")
+	binaryPath := filepath.Join(tmpDir, "sysgreet")
 
-	buildCmd := exec.Command("go", "build", "-o", binaryPath, "../../cmd/hostinfo")
+	buildCmd := exec.Command("go", "build", "-o", binaryPath, "../../cmd/sysgreet")
 	if err := buildCmd.Run(); err != nil {
 		t.Fatalf("failed to build binary: %v", err)
 	}
@@ -181,9 +185,9 @@ func TestBinaryWithInvalidConfig(t *testing.T) {
 		t.Fatalf("failed to write config: %v", err)
 	}
 
-	// Run with invalid config
+	// Run with invalid config and "keep" policy - should fail to load the invalid YAML
 	cmd := exec.Command(binaryPath)
-	cmd.Env = append(os.Environ(), "HOSTINFO_CONFIG="+configPath)
+	cmd.Env = append(os.Environ(), "SYSGREET_CONFIG="+configPath, "CI=1", "SYSGREET_CONFIG_POLICY=keep")
 
 	output, err := cmd.CombinedOutput()
 	if err == nil {
@@ -191,8 +195,8 @@ func TestBinaryWithInvalidConfig(t *testing.T) {
 	}
 
 	// Should contain error message
-	if !strings.Contains(string(output), "hostinfo:") {
-		t.Errorf("error output should contain 'hostinfo:' prefix\nGot: %s", output)
+	if !strings.Contains(string(output), "sysgreet:") {
+		t.Errorf("error output should contain 'sysgreet:' prefix\nGot: %s", output)
 	}
 }
 
@@ -204,9 +208,9 @@ func TestBinaryMemoryFootprint(t *testing.T) {
 	// This test is informational and doesn't fail
 	// It helps track memory usage over time
 	tmpDir := t.TempDir()
-	binaryPath := filepath.Join(tmpDir, "hostinfo")
+	binaryPath := filepath.Join(tmpDir, "sysgreet")
 
-	buildCmd := exec.Command("go", "build", "-o", binaryPath, "../../cmd/hostinfo")
+	buildCmd := exec.Command("go", "build", "-o", binaryPath, "../../cmd/sysgreet")
 	if err := buildCmd.Run(); err != nil {
 		t.Fatalf("failed to build binary: %v", err)
 	}

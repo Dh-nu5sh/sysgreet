@@ -21,7 +21,7 @@ func Load() (Config, string, error) {
 	cfg := Default()
 	candidatePaths := defaultConfigPaths()
 
-	if custom := os.Getenv("HOSTINFO_CONFIG"); custom != "" {
+	if custom := os.Getenv("SYSGREET_CONFIG"); custom != "" {
 		candidatePaths = append([]string{custom}, candidatePaths...)
 	}
 
@@ -70,13 +70,26 @@ func Load() (Config, string, error) {
 func defaultConfigPaths() []string {
 	home, _ := os.UserHomeDir()
 	return []string{
-		filepath.Join(home, ".config", "hostinfo", "config.yaml"),
-		filepath.Join(home, ".config", "hostinfo", "config.yml"),
-		filepath.Join(home, ".config", "hostinfo", "config.toml"),
-		filepath.Join(home, ".hostinfo.yaml"),
-		filepath.Join(home, ".hostinfo.yml"),
-		filepath.Join(home, ".hostinfo.toml"),
+		filepath.Join(home, ".config", "sysgreet", "config.yaml"),
+		filepath.Join(home, ".config", "sysgreet", "config.yml"),
+		filepath.Join(home, ".config", "sysgreet", "config.toml"),
+		filepath.Join(home, ".sysgreet.yaml"),
+		filepath.Join(home, ".sysgreet.yml"),
+		filepath.Join(home, ".sysgreet.toml"),
 	}
+}
+
+func DefaultWritePath() string {
+	if custom := os.Getenv("SYSGREET_CONFIG"); custom != "" {
+		return expandPath(custom)
+	}
+	for _, candidate := range defaultConfigPaths() {
+		if candidate == "" {
+			continue
+		}
+		return expandPath(candidate)
+	}
+	return ""
 }
 
 func expandPath(p string) string {
@@ -152,57 +165,63 @@ func mergeConfig(base *Config, override rawConfig) {
 			base.Network.MaxInterfaces = *override.Network.MaxInterfaces
 		}
 	}
+	if override.Version != nil && *override.Version != "" {
+		base.Version = *override.Version
+	}
+	if override.CreatedAt != nil && *override.CreatedAt != "" {
+		base.CreatedAt = *override.CreatedAt
+	}
 }
 
 func applyEnvOverrides(cfg *Config) {
-	if v, ok := lookupBool("HOSTINFO_DISPLAY_HOSTNAME"); ok {
+	if v, ok := lookupBool("SYSGREET_DISPLAY_HOSTNAME"); ok {
 		cfg.Display.Hostname = v
 	}
-	if v, ok := lookupBool("HOSTINFO_DISPLAY_OS"); ok {
+	if v, ok := lookupBool("SYSGREET_DISPLAY_OS"); ok {
 		cfg.Display.OS = v
 	}
-	if v, ok := lookupBool("HOSTINFO_DISPLAY_IP_ADDRESSES"); ok {
+	if v, ok := lookupBool("SYSGREET_DISPLAY_IP_ADDRESSES"); ok {
 		cfg.Display.IPAddresses = v
 	}
-	if v, ok := lookupBool("HOSTINFO_DISPLAY_REMOTE_IP"); ok {
+	if v, ok := lookupBool("SYSGREET_DISPLAY_REMOTE_IP"); ok {
 		cfg.Display.RemoteIP = v
 	}
-	if v, ok := lookupBool("HOSTINFO_DISPLAY_UPTIME"); ok {
+	if v, ok := lookupBool("SYSGREET_DISPLAY_UPTIME"); ok {
 		cfg.Display.Uptime = v
 	}
-	if v, ok := lookupBool("HOSTINFO_DISPLAY_USER"); ok {
+	if v, ok := lookupBool("SYSGREET_DISPLAY_USER"); ok {
 		cfg.Display.User = v
 	}
-	if v, ok := lookupBool("HOSTINFO_DISPLAY_MEMORY"); ok {
+	if v, ok := lookupBool("SYSGREET_DISPLAY_MEMORY"); ok {
 		cfg.Display.Memory = v
 	}
-	if v, ok := lookupBool("HOSTINFO_DISPLAY_DISK"); ok {
+	if v, ok := lookupBool("SYSGREET_DISPLAY_DISK"); ok {
 		cfg.Display.Disk = v
 	}
-	if v, ok := lookupBool("HOSTINFO_DISPLAY_LOAD"); ok {
+	if v, ok := lookupBool("SYSGREET_DISPLAY_LOAD"); ok {
 		cfg.Display.Load = v
 	}
-	if v, ok := lookupBool("HOSTINFO_DISPLAY_DATETIME"); ok {
+	if v, ok := lookupBool("SYSGREET_DISPLAY_DATETIME"); ok {
 		cfg.Display.Datetime = v
 	}
-	if v, ok := lookupBool("HOSTINFO_DISPLAY_LAST_LOGIN"); ok {
+	if v, ok := lookupBool("SYSGREET_DISPLAY_LAST_LOGIN"); ok {
 		cfg.Display.LastLogin = v
 	}
 
-	if font := os.Getenv("HOSTINFO_ASCII_FONT"); font != "" {
+	if font := os.Getenv("SYSGREET_ASCII_FONT"); font != "" {
 		cfg.ASCII.Font = font
 	}
-	if color := os.Getenv("HOSTINFO_ASCII_COLOR"); color != "" {
+	if color := os.Getenv("SYSGREET_ASCII_COLOR"); color != "" {
 		cfg.ASCII.Color = color
 	}
-	if v, ok := lookupBool("HOSTINFO_ASCII_MONOCHROME"); ok {
+	if v, ok := lookupBool("SYSGREET_ASCII_MONOCHROME"); ok {
 		cfg.ASCII.Monochrome = v
 	}
 
-	if v, ok := lookupBool("HOSTINFO_LAYOUT_COMPACT"); ok {
+	if v, ok := lookupBool("SYSGREET_LAYOUT_COMPACT"); ok {
 		cfg.Layout.Compact = v
 	}
-	if sections := os.Getenv("HOSTINFO_LAYOUT_SECTIONS"); sections != "" {
+	if sections := os.Getenv("SYSGREET_LAYOUT_SECTIONS"); sections != "" {
 		parts := strings.Split(sections, ",")
 		var cleaned []string
 		for _, p := range parts {
@@ -216,10 +235,10 @@ func applyEnvOverrides(cfg *Config) {
 		}
 	}
 
-	if v, ok := lookupBool("HOSTINFO_NETWORK_SHOW_INTERFACE_NAMES"); ok {
+	if v, ok := lookupBool("SYSGREET_NETWORK_SHOW_INTERFACE_NAMES"); ok {
 		cfg.Network.ShowInterfaceNames = v
 	}
-	if max := os.Getenv("HOSTINFO_NETWORK_MAX_INTERFACES"); max != "" {
+	if max := os.Getenv("SYSGREET_NETWORK_MAX_INTERFACES"); max != "" {
 		if parsed, err := parseInt(max); err == nil {
 			cfg.Network.MaxInterfaces = parsed
 		}
@@ -248,10 +267,12 @@ func parseInt(input string) (int, error) {
 }
 
 type rawConfig struct {
-	Display *rawDisplay `yaml:"display" toml:"display"`
-	ASCII   *rawASCII   `yaml:"ascii" toml:"ascii"`
-	Layout  *rawLayout  `yaml:"layout" toml:"layout"`
-	Network *rawNetwork `yaml:"network" toml:"network"`
+	Display   *rawDisplay `yaml:"display" toml:"display"`
+	ASCII     *rawASCII   `yaml:"ascii" toml:"ascii"`
+	Layout    *rawLayout  `yaml:"layout" toml:"layout"`
+	Network   *rawNetwork `yaml:"network" toml:"network"`
+	Version   *string     `yaml:"version" toml:"version"`
+	CreatedAt *string     `yaml:"created_at" toml:"created_at"`
 }
 
 type rawDisplay struct {

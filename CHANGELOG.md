@@ -2,7 +2,7 @@
 
 ## v0.1.0
 
-- Initial cross-platform hostinfo banner implementation
+- Initial cross-platform sysgreet banner implementation
 - Embedded FIGlet fonts with ASCII-art hostname rendering
 - System, network, and resource collectors with graceful degradation
 - YAML/TOML configuration support with optional monochrome mode

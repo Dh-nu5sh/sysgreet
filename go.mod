@@ -1,4 +1,4 @@
-module github.com/veteranbv/hostinfo
+module github.com/veteranbv/sysgreet
 
 go 1.22
 

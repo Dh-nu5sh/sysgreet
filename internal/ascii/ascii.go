@@ -14,7 +14,7 @@ type RenderOptions struct {
 func (r *Renderer) RenderHostname(hostname string, opts RenderOptions) (string, string, string, error) {
 	text := strings.TrimSpace(hostname)
 	if text == "" {
-		text = "hostinfo"
+		text = "sysgreet"
 	}
 	if opts.Uppercase {
 		text = strings.ToUpper(text)

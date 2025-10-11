@@ -1,12 +1,12 @@
-project_name: hostinfo
+project_name: sysgreet
 
 before:
   hooks:
     - go mod tidy
 
 builds:
-  - id: hostinfo
-    main: ./cmd/hostinfo
+  - id: sysgreet
+    main: ./cmd/sysgreet
     goos: [linux, darwin, windows]
     goarch: [amd64, arm64]
     env:
@@ -16,7 +16,7 @@ builds:
 
 archives:
   - id: binary
-    builds: [hostinfo]
+    builds: [sysgreet]
     format: tar.gz
     files:
       - LICENSE
@@ -34,7 +34,7 @@ dist: dist
 release:
   github:
     owner: veteranbv
-    name: hostinfo
+    name: sysgreet
 
 changelog:
   use: git

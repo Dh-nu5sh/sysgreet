@@ -1,6 +1,6 @@
-# Default Hostinfo Banner Snapshot
+# Default Sysgreet Banner Snapshot
 
-This reference output documents the constitutional gates enforced by the Hostinfo CLI.
+This reference output documents the constitutional gates enforced by the Sysgreet CLI.
 
 ## Constitution Gates Checklist
 

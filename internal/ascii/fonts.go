@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/common-nighthawk/go-figure"
-	"github.com/veteranbv/hostinfo/assets"
+	"github.com/veteranbv/sysgreet/assets"
 )
 
 var colorCodes = map[string]string{

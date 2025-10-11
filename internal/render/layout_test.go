@@ -4,8 +4,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/veteranbv/hostinfo/internal/banner"
-	"github.com/veteranbv/hostinfo/internal/config"
+	"github.com/veteranbv/sysgreet/internal/banner"
+	"github.com/veteranbv/sysgreet/internal/config"
 )
 
 func TestRenderer_Render(t *testing.T) {

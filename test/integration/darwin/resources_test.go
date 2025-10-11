@@ -12,7 +12,7 @@ import (
 	"github.com/shirou/gopsutil/v3/disk"
 	"github.com/shirou/gopsutil/v3/mem"
 
-	"github.com/veteranbv/hostinfo/internal/collectors"
+	"github.com/veteranbv/sysgreet/internal/collectors"
 )
 
 func TestResourceCollectorMatchesSystemStats(t *testing.T) {

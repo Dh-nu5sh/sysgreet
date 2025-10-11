@@ -4,8 +4,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/veteranbv/hostinfo/internal/banner"
-	"github.com/veteranbv/hostinfo/internal/config"
+	"github.com/veteranbv/sysgreet/internal/banner"
+	"github.com/veteranbv/sysgreet/internal/config"
 )
 
 // Renderer formats banner output into terminal-friendly text.

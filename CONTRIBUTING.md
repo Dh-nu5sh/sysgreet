@@ -1,6 +1,6 @@
-# Contributing to Hostinfo
+# Contributing to Sysgreet
 
-Thank you for considering contributing to Hostinfo! This document outlines the development workflow and standards for this project.
+Thank you for considering contributing to Sysgreet! This document outlines the development workflow and standards for this project.
 
 ## Code of Conduct
 
@@ -19,8 +19,8 @@ Be respectful, professional, and constructive. We welcome contributions from dev
 1. **Fork and clone the repository**
 
    ```bash
-   git clone https://github.com/veteranbv/hostinfo.git
-   cd hostinfo
+   git clone https://github.com/veteranbv/sysgreet.git
+   cd sysgreet
    ```
 
 2. **Install dependencies**
@@ -32,7 +32,7 @@ Be respectful, professional, and constructive. We welcome contributions from dev
 3. **Run the project locally**
 
    ```bash
-   go run ./cmd/hostinfo
+   go run ./cmd/sysgreet
    ```
 
 4. **Run tests**
@@ -146,8 +146,8 @@ When adding platform-specific code:
 ## Project Structure
 
 ```text
-hostinfo/
-├── cmd/hostinfo/          # Main entry point
+sysgreet/
+├── cmd/sysgreet/          # Main entry point
 ├── internal/
 │   ├── ascii/             # ASCII art rendering
 │   ├── banner/            # Banner orchestration and sections
@@ -169,7 +169,7 @@ hostinfo/
 1. Define the interface in `internal/collectors/system.go`
 2. Implement the collector in a new file or existing collector file
 3. Add platform-specific implementations with build tags if needed
-4. Register the collector in `cmd/hostinfo/main.go`
+4. Register the collector in `cmd/sysgreet/main.go`
 5. Add tests in `internal/collectors/*_test.go`
 
 ### Adding a New Banner Section
@@ -190,7 +190,7 @@ hostinfo/
 
 ## Performance Requirements
 
-Hostinfo has strict performance requirements:
+Sysgreet has strict performance requirements:
 
 - **Startup time**: < 50ms median, < 80ms p95 (enforced by CI)
 - **Binary size**: < 10MB for all platforms
@@ -233,4 +233,4 @@ Releases are handled by maintainers:
 
 ## License
 
-By contributing to Hostinfo, you agree that your contributions will be licensed under the Apache License 2.0.
+By contributing to Sysgreet, you agree that your contributions will be licensed under the Apache License 2.0.

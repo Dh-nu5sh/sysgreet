@@ -5,9 +5,9 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/veteranbv/hostinfo/internal/ascii"
-	"github.com/veteranbv/hostinfo/internal/collectors"
-	"github.com/veteranbv/hostinfo/internal/config"
+	"github.com/veteranbv/sysgreet/internal/ascii"
+	"github.com/veteranbv/sysgreet/internal/collectors"
+	"github.com/veteranbv/sysgreet/internal/config"
 )
 
 // Section represents a rendered section of the banner body.
@@ -65,7 +65,7 @@ func (b *Banner) Build(ctx context.Context, cfg config.Config) (Output, collecto
 func (b *Banner) buildHeader(snap collectors.Snapshot, cfg config.Config) Header {
 	name := snap.System.Hostname
 	if strings.TrimSpace(name) == "" {
-		name = "hostinfo"
+		name = "sysgreet"
 	}
 	art, font, color, err := b.ascii.RenderHostname(name, ascii.RenderOptions{
 		Font:       cfg.ASCII.Font,
