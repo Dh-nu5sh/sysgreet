@@ -50,7 +50,7 @@ network or depending on external runtimes.
 
 ```bash
 # Via Go (requires Go 1.22+)
-go install github.com/veteranbv/hostinfo@latest
+go install github.com/veteranbv/hostinfo/cmd/hostinfo@latest
 
 # Or download a release artifact (Linux/macOS/Windows, amd64 & arm64)
 # https://github.com/veteranbv/hostinfo/releases
