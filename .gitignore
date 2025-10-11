@@ -1,0 +1,32 @@
+# Core tooling directories
+.codex/
+.specify/
+specs/
+
+# Go build artifacts
+bin/
+*.test
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.out
+
+# Module and coverage caches
+/vendor/
+go.work
+*.sum.old
+coverage.out
+
+# Editor and OS noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Logs and temp files
+*.log
+*.tmp

@@ -1,0 +1,40 @@
+project_name: hostinfo
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: hostinfo
+    main: ./cmd/hostinfo
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+      - -s -w
+
+archives:
+  - id: binary
+    builds: [hostinfo]
+    format: tar.gz
+    files:
+      - LICENSE
+      - README.md
+      - configs/example.yaml
+      - configs/example.toml
+
+checksum:
+  name_template: "checksums.txt"
+
+dockers: []
+
+dist: dist
+
+release:
+  github:
+    owner: veteranbv
+    name: hostinfo
+
+changelog:
+  use: git

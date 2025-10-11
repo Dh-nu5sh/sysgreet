@@ -1,0 +1,26 @@
+# Example Hostinfo configuration (TOML)
+[display]
+hostname = true
+os = true
+ip_addresses = true
+remote_ip = true
+uptime = true
+user = true
+memory = true
+disk = true
+load = true
+datetime = true
+last_login = false
+
+[ascii]
+font = "standard"
+color = "cyan"
+monochrome = false
+
+[layout]
+compact = false
+sections = ["header", "network", "system", "resources"]
+
+[network]
+show_interface_names = true
+max_interfaces = 5
