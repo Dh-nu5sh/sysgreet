@@ -105,6 +105,8 @@ sysgreet --text "Production DB"
 sysgreet --disable
 ```
 
+![Text mode example](media/text.png)
+
 ---
 
 ## Configuration (optional)
