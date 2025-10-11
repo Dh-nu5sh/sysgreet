@@ -1,4 +1,4 @@
-# Example Sysgreet configuration (TOML)
+# Sysgreet configuration reference (TOML)
 [display]
 hostname = true
 os = true
@@ -10,11 +10,19 @@ memory = true
 disk = true
 load = true
 datetime = true
-last_login = false
+last_login = true
 
 [ascii]
-font = "standard"
-color = "cyan"
+# Font options: "ANSI Regular", "ANSI Shadow", "Block", "DOS Rebel", "Basic", "standard", "slant"
+font = "ANSI Regular"
+
+# Gradient: cycle colors per line (overrides 'color' if set)
+gradient = ["brightblue", "blue", "cyan", "brightcyan", "white"]
+
+# Single color: use one color for entire banner (ignored if gradient is set)
+# color = "cyan"
+
+# Monochrome: disable all colors
 monochrome = false
 
 [layout]

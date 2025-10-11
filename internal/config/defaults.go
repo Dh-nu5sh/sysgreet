@@ -19,9 +19,10 @@ type DisplayConfig struct {
 
 // ASCIIConfig controls hostname ASCII-art rendering.
 type ASCIIConfig struct {
-	Font       string `yaml:"font" toml:"font"`
-	Color      string `yaml:"color" toml:"color"`
-	Monochrome bool   `yaml:"monochrome" toml:"monochrome"`
+	Font       string   `yaml:"font" toml:"font"`
+	Color      string   `yaml:"color" toml:"color"`
+	Gradient   []string `yaml:"gradient,omitempty" toml:"gradient,omitempty"`
+	Monochrome bool     `yaml:"monochrome" toml:"monochrome"`
 }
 
 // LayoutConfig controls banner layout options.
@@ -63,8 +64,9 @@ func Default() Config {
 			LastLogin:   true,
 		},
 		ASCII: ASCIIConfig{
-			Font:       "slant",
-			Color:      "random",
+			Font:       "ANSI Regular",
+			Color:      "",
+			Gradient:   []string{"brightblue", "blue", "cyan", "brightcyan", "white"},
 			Monochrome: false,
 		},
 		Layout: LayoutConfig{

@@ -1,4 +1,4 @@
-# Default Sysgreet configuration (YAML)
+# Sysgreet configuration reference (YAML)
 display:
   hostname: true
   os: true
@@ -13,8 +13,16 @@ display:
   last_login: true
 
 ascii:
-  font: "random"
-  color: "random"
+  # Font options: "ANSI Regular", "ANSI Shadow", "Block", "DOS Rebel", "Basic", "standard", "slant"
+  font: "ANSI Regular"
+
+  # Gradient: cycle colors per line (overrides 'color' if set)
+  gradient: ["brightblue", "blue", "cyan", "brightcyan", "white"]
+
+  # Single color: use one color for entire banner (ignored if gradient is set)
+  # color: "cyan"
+
+  # Monochrome: disable all colors
   monochrome: false
 
 layout:

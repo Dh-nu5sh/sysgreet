@@ -145,6 +145,9 @@ func mergeConfig(base *Config, override rawConfig) {
 		if override.ASCII.Color != nil && *override.ASCII.Color != "" {
 			base.ASCII.Color = *override.ASCII.Color
 		}
+		if override.ASCII.Gradient != nil && len(*override.ASCII.Gradient) > 0 {
+			base.ASCII.Gradient = append([]string{}, (*override.ASCII.Gradient)...)
+		}
 		if override.ASCII.Monochrome != nil {
 			base.ASCII.Monochrome = *override.ASCII.Monochrome
 		}
@@ -290,9 +293,10 @@ type rawDisplay struct {
 }
 
 type rawASCII struct {
-	Font       *string `yaml:"font" toml:"font"`
-	Color      *string `yaml:"color" toml:"color"`
-	Monochrome *bool   `yaml:"monochrome" toml:"monochrome"`
+	Font       *string   `yaml:"font" toml:"font"`
+	Color      *string   `yaml:"color" toml:"color"`
+	Gradient   *[]string `yaml:"gradient,omitempty" toml:"gradient,omitempty"`
+	Monochrome *bool     `yaml:"monochrome" toml:"monochrome"`
 }
 
 type rawLayout struct {

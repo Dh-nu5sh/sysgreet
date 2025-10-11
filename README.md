@@ -2,6 +2,8 @@
 
 > Beautiful, low-latency system context for every terminal login.
 
+![Sysgreet](media/sysgreet.png)
+
 Sysgreet keeps you oriented the moment a shell prompt appears. It prints the
 hostname in ASCII art alongside a curated snapshot of operating system,
 network, and resource telemetry—so you always know **which** machine you are on
@@ -39,8 +41,8 @@ network or depending on external runtimes.
   the banner keeps rendering.
 - **Performance-guarded** – Startup benchmark (<50 ms median, <80 ms p95) runs in
   CI; process RSS stays <15 MB.
-- **Professional aesthetics** – Embedded FIGlet fonts, ANSI color with automatic
-  monochrome fallback, 80-column mindful layout.
+- **Professional aesthetics** – Unicode block fonts with gradient colors,
+  automatic monochrome fallback, 80-column mindful layout.
 
 ---
 
@@ -87,8 +89,8 @@ Example YAML:
 ```yaml
 # ~/.config/sysgreet/config.yaml
 ascii:
-  font: "slant"
-  color: "cyan"
+  font: "ANSI Regular"
+  gradient: ["brightblue", "blue", "cyan", "brightcyan", "white"]
   monochrome: false
 
 display:
@@ -120,7 +122,7 @@ Environment variables override everything (e.g.
 
 ### Bootstrap behaviour
 
-- First run: sysgreet writes `~/.config/sysgreet/config.yaml` with curated defaults (all sections enabled, `slant` ASCII font, metadata fields `created_at` and `version`).
+- First run: sysgreet writes `~/.config/sysgreet/config.yaml` with curated defaults (all sections enabled, `ANSI Regular` font with blue-to-white gradient, metadata fields `created_at` and `version`).
 - Existing config: the CLI prompts `[K]eep/[O]verwrite/[C]ancel` by default and stores a timestamped `.bak` when you choose overwrite.
 - Non-interactive automation: use `--config-policy` or `SYSGREET_CONFIG_POLICY` to choose `prompt`, `keep`, or `overwrite`. When stdin is not a TTY (e.g. CI jobs), an explicit policy is required.
 - Flags beat environment variables so scripts can override fleet defaults (`SYSGREET_CONFIG_POLICY=overwrite bin/sysgreet --config-policy=keep`).
@@ -129,30 +131,7 @@ Environment variables override everything (e.g.
 
 ## What the banner shows
 
-```ascii
- _   _           _   _        __ _
-| | | | ___  ___| |_(_) ___  / _(_) __ _ _ __ ___
-| |_| |/ _ \/ __| __| |/ __|| |_| |/ _` | '_ ` _ \
-|  _  |  __/\__ \ |_| | (__ |  _| | (_| | | | | | |
-|_| |_|\___||___/\__|_|\___||_| |_|\__,_|_| |_| |_|
-
-Linux 6.8.0 (x86_64)
-
-System
-  Uptime: 4d 12h 33m
-  User: alice /home/alice
-  Time: Fri, 10 Oct 2025 09:45:00 PDT
-
-Network
-  Primary: 192.168.1.42 (en0)
-  Secondary: 10.8.0.2 (utun2)
-  Remote: 203.0.113.5
-
-Resources
-  Mem: 12.3GB free / 16.0GB (23% used)
-  Disk: 210.0GB used / 512.0GB (41% used)
-  CPU Load: 0.45 0.52 0.60
-```
+![Demo output](media/demo.jpg)
 
 - **System** – Hostname (ASCII art), OS name/version, architecture, uptime,
   active user + home, current time, last login when available.
