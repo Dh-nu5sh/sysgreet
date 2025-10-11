@@ -6,7 +6,7 @@
 
 Sysgreet keeps you oriented the moment a shell prompt appears. It prints the
 hostname in ASCII art alongside a curated snapshot of operating system,
-network, and resource telemetry—so you always know **which** machine you are on
+network, and resource telemetry, so you always know **which** machine you are on
 and **whether** it is healthy. Built for managing home labs and fleets alike, it
 remains lightweight, offline-friendly, and cross-platform across Linux, macOS,
 and Windows.
@@ -16,7 +16,7 @@ and Windows.
 ## Why Sysgreet exists
 
 I created Sysgreet while operating a growing home lab and juggling
-multiple SSH sessions. I wanted a professional banner—_not_ a novelty—that
+multiple SSH sessions. I wanted a professional banner (_not_ a novelty) that
 instantly answered three questions:
 
 1. **Where am I logged in?** (Hostname, OS, architecture, remote source)
@@ -30,18 +30,18 @@ network or depending on external runtimes.
 
 ## Highlights
 
-- **Single static binary** – Go 1.22+, no CGO, no daemons, no service
+- **Single static binary** - Go 1.22+, no CGO, no daemons, no service
   dependencies.
-- **Cross-platform parity** – Linux/macOS show load averages; Windows surfaces
+- **Cross-platform parity** - Linux/macOS show load averages; Windows surfaces
   CPU usage. Interface filtering avoids noisy virtual adapters everywhere.
-- **Configurable yet optional** – YAML or TOML profiles toggle sections, pick
-  fonts/colors, set layout order, and cap the interface list. Defaults “just
-  work” with zero files.
-- **Graceful degradation** – Missing metrics or SSH metadata simply fall back;
+- **Configurable yet optional** - YAML or TOML profiles toggle sections, pick
+  fonts/colors, set layout order, and cap the interface list. Defaults "just
+  work" with zero files.
+- **Graceful degradation** - Missing metrics or SSH metadata simply fall back;
   the banner keeps rendering.
-- **Performance-guarded** – Startup benchmark (<50 ms median, <80 ms p95) runs in
+- **Performance-guarded** - Startup benchmark (<50 ms median, <80 ms p95) runs in
   CI; process RSS stays <15 MB.
-- **Professional aesthetics** – Unicode block fonts with gradient colors,
+- **Professional aesthetics** - Unicode block fonts with gradient colors,
   automatic monochrome fallback, 80-column mindful layout.
 
 ---
@@ -147,13 +147,13 @@ Environment variables override everything (e.g.
 
 ![Demo output](media/demo.jpg)
 
-- **System** – Hostname (ASCII art), OS name/version, architecture, uptime,
+- **System** - Hostname (ASCII art), OS name/version, architecture, uptime,
   active user + home, current time, last login when available.
-- **Network** – Primary outbound interface based on routing table, filtered list
+- **Network** - Primary outbound interface based on routing table, filtered list
   of secondary physical interfaces, SSH remote IP (from `SSH_CONNECTION` or
   `SSH_CLIENT`). Loopback, link-local, Docker/VM, and down interfaces stay out of
   view by default.
-- **Resources** – Memory, disk, and CPU metrics with highlight thresholds (≥75% in
+- **Resources** - Memory, disk, and CPU metrics with highlight thresholds (≥75% in
   yellow, ≥90% in red). Windows surfaces realtime CPU usage; Unix hosts show load
   averages.
 
@@ -161,11 +161,11 @@ Environment variables override everything (e.g.
 
 ## Performance guarantees
 
-- **Startup** – `< 50 ms` median, `< 80 ms` p95 (validated by
+- **Startup** - `< 50 ms` median, `< 80 ms` p95 (validated by
   `go test -bench Startup ./test/benchmarks`)
-- **Binary footprint** – `< 10 MB` for all release targets (GoReleaser checks)
-- **Runtime memory** – `< 15 MB` RSS for default banner
-- **No network activity** – All data collected locally, offline-safe
+- **Binary footprint** - `< 10 MB` for all release targets (GoReleaser checks)
+- **Runtime memory** - `< 15 MB` RSS for default banner
+- **No network activity** - All data collected locally, offline-safe
 
 Enable `SYSGREET_DEBUG=1` to log collector errors without interrupting output.
 
@@ -194,7 +194,7 @@ make test-coverage  # Run tests with coverage report
 make build          # Build the binary
 ```
 
-PRs are welcome—please open an issue describing new collectors, layout ideas, or
+PRs are welcome. Please open an issue describing new collectors, layout ideas, or
 platform-specific improvements before diving in.
 
 ---
@@ -217,7 +217,7 @@ platform-specific improvements before diving in.
 - Pluggable section framework (e.g., Kubernetes context, vault status)
 - Prebuilt Windows installer for enterprise onboarding
 
-Ideas welcome—open a discussion if a feature would make Sysgreet more useful for
+Ideas welcome. Open a discussion if a feature would make Sysgreet more useful for
 your fleet.
 
 ---
