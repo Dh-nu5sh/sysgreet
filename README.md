@@ -2,7 +2,7 @@
 
 > Beautiful, low-latency system context for every terminal login.
 
-![Sysgreet](media/sysgreet.png)
+![Sysgreet](media/sysgreet-padded.png)
 
 Sysgreet keeps you oriented the moment a shell prompt appears. It prints the
 hostname in ASCII art alongside a curated snapshot of operating system,
