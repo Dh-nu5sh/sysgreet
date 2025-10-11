@@ -50,7 +50,7 @@ func TestFirstRunCreatesConfig(t *testing.T) {
 	cmd.Stderr = stderr
 
 	timer := time.AfterFunc(10*time.Second, func() {
-		cmd.Process.Kill()
+		_ = cmd.Process.Kill() // Best effort kill on timeout
 	})
 	defer timer.Stop()
 

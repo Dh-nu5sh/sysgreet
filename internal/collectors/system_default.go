@@ -33,12 +33,20 @@ func (DefaultSystemCollector) CollectSystem(ctx context.Context) (SystemInfo, er
 	}
 
 	osName := prettyOS(info.Platform, info.PlatformFamily, info.OS)
+
+	// Convert uptime safely from uint64 to int64 for time.Duration
+	// Cap at max int64 to prevent overflow (292 years)
+	uptime := info.Uptime
+	if uptime > uint64(1<<63-1) {
+		uptime = uint64(1<<63 - 1)
+	}
+
 	return SystemInfo{
 		Hostname:    info.Hostname,
 		OS:          osName,
 		OSVersion:   info.PlatformVersion,
 		Arch:        runtime.GOARCH,
-		Uptime:      time.Duration(info.Uptime) * time.Second,
+		Uptime:      time.Duration(uptime) * time.Second,
 		CurrentUser: currentUser,
 		HomeDir:     homeDir,
 		Datetime:    time.Now(),

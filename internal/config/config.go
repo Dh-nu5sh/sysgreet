@@ -103,126 +103,146 @@ func expandPath(p string) string {
 }
 
 func mergeConfig(base *Config, override rawConfig) {
-	if override.Display != nil {
-		if override.Display.Hostname != nil {
-			base.Display.Hostname = *override.Display.Hostname
-		}
-		if override.Display.OS != nil {
-			base.Display.OS = *override.Display.OS
-		}
-		if override.Display.IPAddresses != nil {
-			base.Display.IPAddresses = *override.Display.IPAddresses
-		}
-		if override.Display.RemoteIP != nil {
-			base.Display.RemoteIP = *override.Display.RemoteIP
-		}
-		if override.Display.Uptime != nil {
-			base.Display.Uptime = *override.Display.Uptime
-		}
-		if override.Display.User != nil {
-			base.Display.User = *override.Display.User
-		}
-		if override.Display.Memory != nil {
-			base.Display.Memory = *override.Display.Memory
-		}
-		if override.Display.Disk != nil {
-			base.Display.Disk = *override.Display.Disk
-		}
-		if override.Display.Load != nil {
-			base.Display.Load = *override.Display.Load
-		}
-		if override.Display.Datetime != nil {
-			base.Display.Datetime = *override.Display.Datetime
-		}
-		if override.Display.LastLogin != nil {
-			base.Display.LastLogin = *override.Display.LastLogin
-		}
+	mergeDisplay(base, override.Display)
+	mergeASCII(base, override.ASCII)
+	mergeLayout(base, override.Layout)
+	mergeNetwork(base, override.Network)
+	mergeMetadata(base, override.Version, override.CreatedAt)
+}
+
+func mergeDisplay(base *Config, display *rawDisplay) {
+	if display == nil {
+		return
 	}
-	if override.ASCII != nil {
-		if override.ASCII.Font != nil && *override.ASCII.Font != "" {
-			base.ASCII.Font = *override.ASCII.Font
-		}
-		if override.ASCII.Color != nil && *override.ASCII.Color != "" {
-			base.ASCII.Color = *override.ASCII.Color
-		}
-		if override.ASCII.Gradient != nil && len(*override.ASCII.Gradient) > 0 {
-			base.ASCII.Gradient = append([]string{}, (*override.ASCII.Gradient)...)
-		}
-		if override.ASCII.Monochrome != nil {
-			base.ASCII.Monochrome = *override.ASCII.Monochrome
-		}
+	if display.Hostname != nil {
+		base.Display.Hostname = *display.Hostname
 	}
-	if override.Layout != nil {
-		if override.Layout.Sections != nil && len(*override.Layout.Sections) > 0 {
-			base.Layout.Sections = append([]string{}, (*override.Layout.Sections)...)
-		}
-		if override.Layout.Compact != nil {
-			base.Layout.Compact = *override.Layout.Compact
-		}
+	if display.OS != nil {
+		base.Display.OS = *display.OS
 	}
-	if override.Network != nil {
-		if override.Network.ShowInterfaceNames != nil {
-			base.Network.ShowInterfaceNames = *override.Network.ShowInterfaceNames
-		}
-		if override.Network.MaxInterfaces != nil {
-			base.Network.MaxInterfaces = *override.Network.MaxInterfaces
-		}
+	if display.IPAddresses != nil {
+		base.Display.IPAddresses = *display.IPAddresses
 	}
-	if override.Version != nil && *override.Version != "" {
-		base.Version = *override.Version
+	if display.RemoteIP != nil {
+		base.Display.RemoteIP = *display.RemoteIP
 	}
-	if override.CreatedAt != nil && *override.CreatedAt != "" {
-		base.CreatedAt = *override.CreatedAt
+	if display.Uptime != nil {
+		base.Display.Uptime = *display.Uptime
+	}
+	if display.User != nil {
+		base.Display.User = *display.User
+	}
+	if display.Memory != nil {
+		base.Display.Memory = *display.Memory
+	}
+	if display.Disk != nil {
+		base.Display.Disk = *display.Disk
+	}
+	if display.Load != nil {
+		base.Display.Load = *display.Load
+	}
+	if display.Datetime != nil {
+		base.Display.Datetime = *display.Datetime
+	}
+	if display.LastLogin != nil {
+		base.Display.LastLogin = *display.LastLogin
+	}
+}
+
+func mergeASCII(base *Config, ascii *rawASCII) {
+	if ascii == nil {
+		return
+	}
+	if ascii.Font != nil && *ascii.Font != "" {
+		base.ASCII.Font = *ascii.Font
+	}
+	if ascii.Color != nil && *ascii.Color != "" {
+		base.ASCII.Color = *ascii.Color
+	}
+	if ascii.Gradient != nil && len(*ascii.Gradient) > 0 {
+		base.ASCII.Gradient = append([]string{}, (*ascii.Gradient)...)
+	}
+	if ascii.Monochrome != nil {
+		base.ASCII.Monochrome = *ascii.Monochrome
+	}
+}
+
+func mergeLayout(base *Config, layout *rawLayout) {
+	if layout == nil {
+		return
+	}
+	if layout.Sections != nil && len(*layout.Sections) > 0 {
+		base.Layout.Sections = append([]string{}, (*layout.Sections)...)
+	}
+	if layout.Compact != nil {
+		base.Layout.Compact = *layout.Compact
+	}
+}
+
+func mergeNetwork(base *Config, network *rawNetwork) {
+	if network == nil {
+		return
+	}
+	if network.ShowInterfaceNames != nil {
+		base.Network.ShowInterfaceNames = *network.ShowInterfaceNames
+	}
+	if network.MaxInterfaces != nil {
+		base.Network.MaxInterfaces = *network.MaxInterfaces
+	}
+}
+
+func mergeMetadata(base *Config, version, createdAt *string) {
+	if version != nil && *version != "" {
+		base.Version = *version
+	}
+	if createdAt != nil && *createdAt != "" {
+		base.CreatedAt = *createdAt
 	}
 }
 
 func applyEnvOverrides(cfg *Config) {
-	if v, ok := lookupBool("SYSGREET_DISPLAY_HOSTNAME"); ok {
-		cfg.Display.Hostname = v
-	}
-	if v, ok := lookupBool("SYSGREET_DISPLAY_OS"); ok {
-		cfg.Display.OS = v
-	}
-	if v, ok := lookupBool("SYSGREET_DISPLAY_IP_ADDRESSES"); ok {
-		cfg.Display.IPAddresses = v
-	}
-	if v, ok := lookupBool("SYSGREET_DISPLAY_REMOTE_IP"); ok {
-		cfg.Display.RemoteIP = v
-	}
-	if v, ok := lookupBool("SYSGREET_DISPLAY_UPTIME"); ok {
-		cfg.Display.Uptime = v
-	}
-	if v, ok := lookupBool("SYSGREET_DISPLAY_USER"); ok {
-		cfg.Display.User = v
-	}
-	if v, ok := lookupBool("SYSGREET_DISPLAY_MEMORY"); ok {
-		cfg.Display.Memory = v
-	}
-	if v, ok := lookupBool("SYSGREET_DISPLAY_DISK"); ok {
-		cfg.Display.Disk = v
-	}
-	if v, ok := lookupBool("SYSGREET_DISPLAY_LOAD"); ok {
-		cfg.Display.Load = v
-	}
-	if v, ok := lookupBool("SYSGREET_DISPLAY_DATETIME"); ok {
-		cfg.Display.Datetime = v
-	}
-	if v, ok := lookupBool("SYSGREET_DISPLAY_LAST_LOGIN"); ok {
-		cfg.Display.LastLogin = v
-	}
+	applyDisplayOverrides(&cfg.Display)
+	applyASCIIOverrides(&cfg.ASCII)
+	applyLayoutOverrides(&cfg.Layout)
+	applyNetworkOverrides(&cfg.Network)
+}
 
+func applyDisplayOverrides(display *DisplayConfig) {
+	boolFields := map[string]*bool{
+		"SYSGREET_DISPLAY_HOSTNAME":     &display.Hostname,
+		"SYSGREET_DISPLAY_OS":           &display.OS,
+		"SYSGREET_DISPLAY_IP_ADDRESSES": &display.IPAddresses,
+		"SYSGREET_DISPLAY_REMOTE_IP":    &display.RemoteIP,
+		"SYSGREET_DISPLAY_UPTIME":       &display.Uptime,
+		"SYSGREET_DISPLAY_USER":         &display.User,
+		"SYSGREET_DISPLAY_MEMORY":       &display.Memory,
+		"SYSGREET_DISPLAY_DISK":         &display.Disk,
+		"SYSGREET_DISPLAY_LOAD":         &display.Load,
+		"SYSGREET_DISPLAY_DATETIME":     &display.Datetime,
+		"SYSGREET_DISPLAY_LAST_LOGIN":   &display.LastLogin,
+	}
+	for key, field := range boolFields {
+		if v, ok := lookupBool(key); ok {
+			*field = v
+		}
+	}
+}
+
+func applyASCIIOverrides(ascii *ASCIIConfig) {
 	if font := os.Getenv("SYSGREET_ASCII_FONT"); font != "" {
-		cfg.ASCII.Font = font
+		ascii.Font = font
 	}
 	if color := os.Getenv("SYSGREET_ASCII_COLOR"); color != "" {
-		cfg.ASCII.Color = color
+		ascii.Color = color
 	}
 	if v, ok := lookupBool("SYSGREET_ASCII_MONOCHROME"); ok {
-		cfg.ASCII.Monochrome = v
+		ascii.Monochrome = v
 	}
+}
 
+func applyLayoutOverrides(layout *LayoutConfig) {
 	if v, ok := lookupBool("SYSGREET_LAYOUT_COMPACT"); ok {
-		cfg.Layout.Compact = v
+		layout.Compact = v
 	}
 	if sections := os.Getenv("SYSGREET_LAYOUT_SECTIONS"); sections != "" {
 		parts := strings.Split(sections, ",")
@@ -234,16 +254,18 @@ func applyEnvOverrides(cfg *Config) {
 			}
 		}
 		if len(cleaned) > 0 {
-			cfg.Layout.Sections = cleaned
+			layout.Sections = cleaned
 		}
 	}
+}
 
+func applyNetworkOverrides(network *NetworkConfig) {
 	if v, ok := lookupBool("SYSGREET_NETWORK_SHOW_INTERFACE_NAMES"); ok {
-		cfg.Network.ShowInterfaceNames = v
+		network.ShowInterfaceNames = v
 	}
 	if max := os.Getenv("SYSGREET_NETWORK_MAX_INTERFACES"); max != "" {
 		if parsed, err := parseInt(max); err == nil {
-			cfg.Network.MaxInterfaces = parsed
+			network.MaxInterfaces = parsed
 		}
 	}
 }

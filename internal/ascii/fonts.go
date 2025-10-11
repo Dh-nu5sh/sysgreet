@@ -13,6 +13,8 @@ import (
 	"github.com/veteranbv/sysgreet/assets"
 )
 
+const resetColor = "reset"
+
 var colorCodes = map[string]string{
 	"reset":       "\033[0m",
 	"red":         "\033[31m",
@@ -60,7 +62,7 @@ func NewRenderer() (*Renderer, error) {
 	return &Renderer{
 		fonts: fonts,
 		order: order,
-		rnd:   rand.New(rand.NewSource(time.Now().UnixNano())),
+		rnd:   rand.New(rand.NewSource(time.Now().UnixNano())), //nolint:gosec // G404: Non-security use (visual randomization only)
 	}, nil
 }
 
@@ -88,7 +90,7 @@ func (r *Renderer) RenderWithGradient(text, fontName, colorName string, gradient
 	fig := figure.NewFigureWithFont(text, bytes.NewReader(fontData), true)
 	rows := fig.Slicify()
 
-	color := "reset"
+	color := resetColor
 	var asciiArt string
 
 	if !monochrome && len(gradient) > 0 {
@@ -97,7 +99,7 @@ func (r *Renderer) RenderWithGradient(text, fontName, colorName string, gradient
 		for i, row := range rows {
 			gradientColor := gradient[i%len(gradient)]
 			if code, ok := colorCodes[strings.ToLower(gradientColor)]; ok {
-				coloredRows = append(coloredRows, fmt.Sprintf("%s%s%s", code, row, colorCodes["reset"]))
+				coloredRows = append(coloredRows, fmt.Sprintf("%s%s%s", code, row, colorCodes[resetColor]))
 			} else {
 				coloredRows = append(coloredRows, row)
 			}
@@ -108,8 +110,8 @@ func (r *Renderer) RenderWithGradient(text, fontName, colorName string, gradient
 		// Single color mode
 		asciiArt = strings.Join(rows, "\n")
 		color = r.pickColor(colorName)
-		if code, ok := colorCodes[color]; ok && color != "reset" {
-			asciiArt = fmt.Sprintf("%s%s%s", code, asciiArt, colorCodes["reset"])
+		if code, ok := colorCodes[color]; ok && color != resetColor {
+			asciiArt = fmt.Sprintf("%s%s%s", code, asciiArt, colorCodes[resetColor])
 		}
 	} else {
 		asciiArt = strings.Join(rows, "\n")
@@ -130,5 +132,5 @@ func (r *Renderer) pickColor(name string) string {
 	if _, ok := colorCodes[name]; ok {
 		return name
 	}
-	return "reset"
+	return resetColor
 }

@@ -92,82 +92,84 @@ func Bootstrap(ctx context.Context, cfgPath string, ioCfg IO, opts Options) (Res
 		if info.IsDir() {
 			return result, fmt.Errorf("bootstrap: config path %s is a directory", cfgPath)
 		}
-
-		switch resolution.Value {
-		case PolicyKeep:
-			result.Action = ActionKept
-			logStatus(ioCfg.Stderr, result.Action, cfgPath, "")
-			return result, nil
-		case PolicyOverwrite:
-			if err := ctx.Err(); err != nil {
-				return result, err
-			}
-			data, err := renderDefaultConfig(now)
-			if err != nil {
-				return result, fmt.Errorf("bootstrap: render default config: %w", err)
-			}
-			backupPath, err := createBackup(cfgPath, now)
-			if err != nil {
-				return result, fmt.Errorf("bootstrap: backup existing config: %w", err)
-			}
-			if err := AtomicWriteFile(cfgPath, data, 0o644); err != nil {
-				return result, fmt.Errorf("bootstrap: write default config: %w", err)
-			}
-			result.Action = ActionOverwritten
-			result.BackupPath = backupPath
-			logStatus(ioCfg.Stderr, result.Action, cfgPath, backupPath)
-			return result, nil
-		case PolicyPrompt:
-			if err := ctx.Err(); err != nil {
-				return result, err
-			}
-			outcome, err := PromptForOverwrite(ioCfg, cfgPath)
-			if err != nil {
-				return result, err
-			}
-			result.Prompted = true
-			switch outcome.Decision {
-			case PromptKeep:
-				result.Action = ActionKept
-				logStatus(ioCfg.Stderr, result.Action, cfgPath, "")
-				return result, nil
-			case PromptOverwrite:
-				data, err := renderDefaultConfig(now)
-				if err != nil {
-					return result, fmt.Errorf("bootstrap: render default config: %w", err)
-				}
-				backupPath, err := createBackup(cfgPath, now)
-				if err != nil {
-					return result, fmt.Errorf("bootstrap: backup existing config: %w", err)
-				}
-				if err := AtomicWriteFile(cfgPath, data, 0o644); err != nil {
-					return result, fmt.Errorf("bootstrap: write default config: %w", err)
-				}
-				result.Action = ActionOverwritten
-				result.BackupPath = backupPath
-				logStatus(ioCfg.Stderr, result.Action, cfgPath, backupPath)
-				return result, nil
-			case PromptCancel:
-				result.Action = ActionSkipped
-				return result, ErrUserCancelled
-			default:
-				return result, fmt.Errorf("bootstrap: unknown prompt decision %s", outcome.Decision)
-			}
-		default:
-			return result, fmt.Errorf("bootstrap: unsupported policy %s", resolution.Value)
-		}
+		return handleExistingConfig(ctx, cfgPath, ioCfg, result, resolution.Value, now)
 	}
+
 	if statErr != nil && !errors.Is(statErr, fs.ErrNotExist) {
 		return result, fmt.Errorf("bootstrap: stat config: %w", statErr)
 	}
 
+	return createNewConfig(ctx, cfgPath, ioCfg.Stderr, result, resolution.Value, now)
+}
+
+func handleExistingConfig(ctx context.Context, cfgPath string, ioCfg IO, result Result, policy PolicyValue, now time.Time) (Result, error) {
+	switch policy {
+	case PolicyKeep:
+		result.Action = ActionKept
+		logStatus(ioCfg.Stderr, result.Action, cfgPath, "")
+		return result, nil
+	case PolicyOverwrite:
+		return overwriteConfig(ctx, cfgPath, ioCfg.Stderr, result, now)
+	case PolicyPrompt:
+		return handlePromptOverwrite(ctx, cfgPath, ioCfg, result, now)
+	default:
+		return result, fmt.Errorf("bootstrap: unsupported policy %s", policy)
+	}
+}
+
+func overwriteConfig(ctx context.Context, cfgPath string, stderr io.Writer, result Result, now time.Time) (Result, error) {
+	if err := ctx.Err(); err != nil {
+		return result, err
+	}
+	data, err := renderDefaultConfig(now)
+	if err != nil {
+		return result, fmt.Errorf("bootstrap: render default config: %w", err)
+	}
+	backupPath, err := createBackup(cfgPath, now)
+	if err != nil {
+		return result, fmt.Errorf("bootstrap: backup existing config: %w", err)
+	}
+	if err := AtomicWriteFile(cfgPath, data, 0o644); err != nil {
+		return result, fmt.Errorf("bootstrap: write default config: %w", err)
+	}
+	result.Action = ActionOverwritten
+	result.BackupPath = backupPath
+	logStatus(stderr, result.Action, cfgPath, backupPath)
+	return result, nil
+}
+
+func handlePromptOverwrite(ctx context.Context, cfgPath string, ioCfg IO, result Result, now time.Time) (Result, error) {
+	if err := ctx.Err(); err != nil {
+		return result, err
+	}
+	outcome, err := PromptForOverwrite(ioCfg, cfgPath)
+	if err != nil {
+		return result, err
+	}
+	result.Prompted = true
+	switch outcome.Decision {
+	case PromptKeep:
+		result.Action = ActionKept
+		logStatus(ioCfg.Stderr, result.Action, cfgPath, "")
+		return result, nil
+	case PromptOverwrite:
+		return overwriteConfig(ctx, cfgPath, ioCfg.Stderr, result, now)
+	case PromptCancel:
+		result.Action = ActionSkipped
+		return result, ErrUserCancelled
+	default:
+		return result, fmt.Errorf("bootstrap: unknown prompt decision %s", outcome.Decision)
+	}
+}
+
+func createNewConfig(ctx context.Context, cfgPath string, stderr io.Writer, result Result, policy PolicyValue, now time.Time) (Result, error) {
 	if err := ctx.Err(); err != nil {
 		return result, err
 	}
 
-	if resolution.Value == PolicyKeep {
+	if policy == PolicyKeep {
 		result.Action = ActionKept
-		logStatus(ioCfg.Stderr, result.Action, cfgPath, "")
+		logStatus(stderr, result.Action, cfgPath, "")
 		return result, nil
 	}
 
@@ -181,6 +183,6 @@ func Bootstrap(ctx context.Context, cfgPath string, ioCfg IO, opts Options) (Res
 	}
 
 	result.Action = ActionCreated
-	logStatus(ioCfg.Stderr, result.Action, cfgPath, "")
+	logStatus(stderr, result.Action, cfgPath, "")
 	return result, nil
 }

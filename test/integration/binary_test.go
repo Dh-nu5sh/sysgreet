@@ -92,7 +92,7 @@ func TestBinaryExecution(t *testing.T) {
 			timeout := time.Second * 5
 			timer := time.AfterFunc(timeout, func() {
 				if cmd.Process != nil {
-					cmd.Process.Kill()
+					_ = cmd.Process.Kill() // Best effort kill on timeout
 				}
 			})
 			defer timer.Stop()
