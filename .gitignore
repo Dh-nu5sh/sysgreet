@@ -8,6 +8,7 @@ specs/
 
 # Go build artifacts
 bin/
+sysgreet
 *.test
 *.exe
 *.exe~
