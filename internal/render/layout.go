@@ -25,6 +25,7 @@ func (r Renderer) Render(out banner.Output, cfg config.Config) string {
 	}
 
 	var builder strings.Builder
+	builder.WriteString("\n")
 	builder.WriteString(out.Header.Art)
 	if len(out.Header.Lines) > 0 {
 		builder.WriteString("\n")
