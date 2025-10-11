@@ -83,12 +83,22 @@ func main() {
 	// Normal mode: bootstrap config and collect real data
 	cfgPath := config.DefaultWritePath()
 	if cfgPath != "" {
-		if _, err := bootstrap.Bootstrap(ctx, cfgPath, bootstrap.IO{Stdin: os.Stdin, Stdout: os.Stdout, Stderr: os.Stderr}, bootstrap.Options{FlagPolicy: *policyFlag, EnvPolicy: policyEnv, Interactive: interactive}); err != nil {
-			if errors.Is(err, bootstrap.ErrUserCanceled) {
-				return
-			}
-			fmt.Fprintf(os.Stderr, "sysgreet: %v\n", err)
+		info, statErr := os.Stat(cfgPath)
+		policyProvided := *policyFlag != "" || policyEnv != ""
+		configMissing := errors.Is(statErr, os.ErrNotExist)
+		configIsDir := statErr == nil && info.IsDir()
+		if statErr != nil && !configMissing {
+			fmt.Fprintf(os.Stderr, "sysgreet: stat config: %v\n", statErr)
 			os.Exit(1)
+		}
+		if policyProvided || configMissing || configIsDir {
+			if _, err := bootstrap.Bootstrap(ctx, cfgPath, bootstrap.IO{Stdin: os.Stdin, Stdout: os.Stdout, Stderr: os.Stderr}, bootstrap.Options{FlagPolicy: *policyFlag, EnvPolicy: policyEnv, Interactive: interactive}); err != nil {
+				if errors.Is(err, bootstrap.ErrUserCanceled) {
+					return
+				}
+				fmt.Fprintf(os.Stderr, "sysgreet: %v\n", err)
+				os.Exit(1)
+			}
 		}
 	}
 

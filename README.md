@@ -54,6 +54,10 @@ network or depending on external runtimes.
 # Via Go (requires Go 1.22+)
 go install github.com/veteranbv/sysgreet/cmd/sysgreet@latest
 
+# Ensure Go's bin directory is in your PATH
+# Add this to ~/.bashrc, ~/.zshrc, or equivalent if not already present:
+export PATH="$HOME/go/bin:$PATH"
+
 # Or download a release artifact (Linux/macOS/Windows, amd64 & arm64)
 # https://github.com/veteranbv/sysgreet/releases
 ```
@@ -133,7 +137,7 @@ Environment variables override everything (e.g.
 ### Bootstrap behaviour
 
 - First run: sysgreet writes `~/.config/sysgreet/config.yaml` with curated defaults (all sections enabled, `ANSI Regular` font with blue-to-white gradient, metadata fields `created_at` and `version`).
-- Existing config: the CLI prompts `[K]eep/[O]verwrite/[C]ancel` by default and stores a timestamped `.bak` when you choose overwrite.
+- Existing config: sysgreet leaves the file untouched by default. Provide `--config-policy prompt` (or `SYSGREET_CONFIG_POLICY=prompt`) to surface the `[K]eep/[O]verwrite/[C]ancel` flow, or `overwrite` to regenerate the defaults (a timestamped `.bak` is created first).
 - Non-interactive automation: use `--config-policy` or `SYSGREET_CONFIG_POLICY` to choose `prompt`, `keep`, or `overwrite`. When stdin is not a TTY (e.g. CI jobs), an explicit policy is required.
 - Flags beat environment variables so scripts can override fleet defaults (`SYSGREET_CONFIG_POLICY=overwrite bin/sysgreet --config-policy=keep`).
 
