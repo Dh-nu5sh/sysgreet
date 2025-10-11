@@ -5,11 +5,11 @@ import (
 	"os"
 )
 
-var debugEnabled = os.Getenv("HOSTINFO_DEBUG") != ""
+var debugEnabled = os.Getenv("SYSGREET_DEBUG") != ""
 
 func recordError(context string, err error) {
 	if err == nil || !debugEnabled {
 		return
 	}
-	log.Printf("hostinfo %s: %v", context, err)
+	log.Printf("sysgreet %s: %v", context, err)
 }

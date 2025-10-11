@@ -5,9 +5,9 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/veteranbv/hostinfo/internal/ascii"
-	"github.com/veteranbv/hostinfo/internal/collectors"
-	"github.com/veteranbv/hostinfo/internal/config"
+	"github.com/veteranbv/sysgreet/internal/ascii"
+	"github.com/veteranbv/sysgreet/internal/collectors"
+	"github.com/veteranbv/sysgreet/internal/config"
 )
 
 // Section represents a rendered section of the banner body.
@@ -57,19 +57,25 @@ func New(providers collectors.Providers, renderer *ascii.Renderer, builders []Bu
 // Build produces the banner output using the provided configuration.
 func (b *Banner) Build(ctx context.Context, cfg config.Config) (Output, collectors.Snapshot, error) {
 	snap := b.providers.Gather(ctx)
+	return b.BuildWithSnapshot(snap, cfg), snap, nil
+}
+
+// BuildWithSnapshot renders banner output using a pre-collected snapshot (e.g., for demo mode).
+func (b *Banner) BuildWithSnapshot(snap collectors.Snapshot, cfg config.Config) Output {
 	header := b.buildHeader(snap, cfg)
 	sections := b.buildSections(snap, cfg)
-	return Output{Header: header, Sections: sections}, snap, nil
+	return Output{Header: header, Sections: sections}
 }
 
 func (b *Banner) buildHeader(snap collectors.Snapshot, cfg config.Config) Header {
 	name := snap.System.Hostname
 	if strings.TrimSpace(name) == "" {
-		name = "hostinfo"
+		name = "sysgreet"
 	}
 	art, font, color, err := b.ascii.RenderHostname(name, ascii.RenderOptions{
 		Font:       cfg.ASCII.Font,
 		Color:      cfg.ASCII.Color,
+		Gradient:   cfg.ASCII.Gradient,
 		Monochrome: cfg.ASCII.Monochrome,
 		Uppercase:  true,
 	})

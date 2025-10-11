@@ -22,8 +22,8 @@ jobs:
           go test -bench Startup ./test/benchmarks
       - name: Validate go install path
         run: |
-          go install ./cmd/hostinfo
-          hostinfo --disable
+          go install ./cmd/sysgreet
+          sysgreet --disable
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v5
         with:

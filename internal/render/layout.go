@@ -4,8 +4,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/veteranbv/hostinfo/internal/banner"
-	"github.com/veteranbv/hostinfo/internal/config"
+	"github.com/veteranbv/sysgreet/internal/banner"
+	"github.com/veteranbv/sysgreet/internal/config"
 )
 
 // Renderer formats banner output into terminal-friendly text.
@@ -25,6 +25,7 @@ func (r Renderer) Render(out banner.Output, cfg config.Config) string {
 	}
 
 	var builder strings.Builder
+	builder.WriteString("\n")
 	builder.WriteString(out.Header.Art)
 	if len(out.Header.Lines) > 0 {
 		builder.WriteString("\n")

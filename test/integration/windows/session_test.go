@@ -8,11 +8,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/veteranbv/hostinfo/internal/ascii"
-	"github.com/veteranbv/hostinfo/internal/banner"
-	"github.com/veteranbv/hostinfo/internal/collectors"
-	"github.com/veteranbv/hostinfo/internal/config"
-	"github.com/veteranbv/hostinfo/internal/render"
+	"github.com/veteranbv/sysgreet/internal/ascii"
+	"github.com/veteranbv/sysgreet/internal/banner"
+	"github.com/veteranbv/sysgreet/internal/collectors"
+	"github.com/veteranbv/sysgreet/internal/config"
+	"github.com/veteranbv/sysgreet/internal/render"
 )
 
 func TestSessionCollectorFallsBackToSSHClient(t *testing.T) {
@@ -80,7 +80,7 @@ layout.sections = ["network", "system"]
 	if err := os.WriteFile(cfgPath, []byte(content), 0o644); err != nil {
 		t.Fatalf("write config: %v", err)
 	}
-	t.Setenv("HOSTINFO_CONFIG", cfgPath)
+	t.Setenv("SYSGREET_CONFIG", cfgPath)
 	cfg, _, err := config.Load()
 	if err != nil {
 		t.Fatalf("Load: %v", err)

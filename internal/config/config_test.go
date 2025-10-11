@@ -2,6 +2,7 @@ package config
 
 import (
 	os "os"
+	"path/filepath"
 	testing "testing"
 )
 
@@ -18,21 +19,32 @@ func TestLoad_DefaultsWhenNoFile(t *testing.T) {
 	if cfg.Layout.Compact != def.Layout.Compact || len(cfg.Layout.Sections) != len(def.Layout.Sections) {
 		t.Fatalf("expected defaults, got %+v", cfg)
 	}
+	if cfg.ASCII.Font != "ANSI Regular" {
+		t.Fatalf("expected ANSI Regular font by default, got %s", cfg.ASCII.Font)
+	}
+	if cfg.Version != SchemaVersion {
+		t.Fatalf("expected schema version %s, got %s", SchemaVersion, cfg.Version)
+	}
+	if cfg.CreatedAt != "" {
+		t.Fatalf("expected empty created_at for in-memory defaults, got %q", cfg.CreatedAt)
+	}
 }
 
 func TestLoad_YAMLOverrides(t *testing.T) {
 	dir := t.TempDir()
 	t.Setenv("HOME", dir)
-	cfgDir := dir + "/.config/hostinfo"
+	cfgDir := dir + "/.config/sysgreet"
 	if err := os.MkdirAll(cfgDir, 0o755); err != nil {
 		t.Fatalf("mkdir: %v", err)
 	}
 	content := []byte(`display:
   hostname: false
 ascii:
-  font: "slant"
+  font: "standard"
 network:
   max_interfaces: 1
+version: v42
+created_at: 2024-01-01T00:00:00Z
 `)
 	if err := os.WriteFile(cfgDir+"/config.yaml", content, 0o644); err != nil {
 		t.Fatalf("write config: %v", err)
@@ -48,20 +60,26 @@ network:
 	if cfg.Display.Hostname {
 		t.Fatalf("expected hostname disabled")
 	}
-	if cfg.ASCII.Font != "slant" {
+	if cfg.ASCII.Font != "standard" {
 		t.Fatalf("expected font override, got %s", cfg.ASCII.Font)
 	}
 	if cfg.Network.MaxInterfaces != 1 {
 		t.Fatalf("expected max interfaces 1, got %d", cfg.Network.MaxInterfaces)
+	}
+	if cfg.Version != "v42" {
+		t.Fatalf("expected version v42, got %s", cfg.Version)
+	}
+	if cfg.CreatedAt != "2024-01-01T00:00:00Z" {
+		t.Fatalf("expected created_at preserved, got %s", cfg.CreatedAt)
 	}
 }
 
 func TestLoad_EnvOverrides(t *testing.T) {
 	dir := t.TempDir()
 	t.Setenv("HOME", dir)
-	t.Setenv("HOSTINFO_DISPLAY_REMOTE_IP", "false")
-	t.Setenv("HOSTINFO_LAYOUT_SECTIONS", "header,resources")
-	t.Setenv("HOSTINFO_NETWORK_MAX_INTERFACES", "5")
+	t.Setenv("SYSGREET_DISPLAY_REMOTE_IP", "false")
+	t.Setenv("SYSGREET_LAYOUT_SECTIONS", "header,resources")
+	t.Setenv("SYSGREET_NETWORK_MAX_INTERFACES", "5")
 
 	cfg, _, err := Load()
 	if err != nil {
@@ -85,5 +103,26 @@ func TestDefaultSectionsOrder(t *testing.T) {
 	}
 	if cfg.Layout.Sections[0] != "header" {
 		t.Fatalf("expected header first, got %s", cfg.Layout.Sections[0])
+	}
+}
+
+func TestDefaultWritePathUsesEnv(t *testing.T) {
+	dir := t.TempDir()
+	custom := filepath.Join(dir, "custom.yaml")
+	t.Setenv("SYSGREET_CONFIG", custom)
+	got := DefaultWritePath()
+	if got != custom {
+		t.Fatalf("expected %s, got %s", custom, got)
+	}
+}
+
+func TestDefaultWritePathFallsBackToHome(t *testing.T) {
+	dir := t.TempDir()
+	t.Setenv("HOME", dir)
+	t.Setenv("SYSGREET_CONFIG", "")
+	got := DefaultWritePath()
+	expected := filepath.Join(dir, ".config", "sysgreet", "config.yaml")
+	if got != expected {
+		t.Fatalf("expected %s, got %s", expected, got)
 	}
 }

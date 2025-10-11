@@ -1,6 +1,6 @@
 package banner
 
-import "github.com/veteranbv/hostinfo/internal/config"
+import "github.com/veteranbv/sysgreet/internal/config"
 
 // BuildersForConfig returns section builders ordered according to configuration.
 func BuildersForConfig(cfg config.Config) []Builder {

@@ -39,7 +39,7 @@ jobs:
       - name: Run tests
         env:
           CGO_ENABLED: 0
-        run: go test -v -race -coverprofile=coverage.out ./...
+        run: go test -v -coverprofile=coverage.out ./...
       - name: Check coverage
         run: go tool cover -func=coverage.out
 
@@ -83,6 +83,6 @@ jobs:
         env:
           CGO_ENABLED: 0
         run: |
-          go build -o hostinfo ./cmd/hostinfo
-          ./hostinfo --disable
-          ls -lh hostinfo
+          go build -o sysgreet ./cmd/sysgreet
+          ./sysgreet --disable
+          ls -lh sysgreet

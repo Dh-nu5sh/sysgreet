@@ -86,10 +86,10 @@ func TestColorizer_Wrap(t *testing.T) {
 			wantContains: []string{"\033[32m", "OK", "\033[0m"},
 		},
 		{
-			name:      "cyan color enabled",
-			enabled:   true,
-			color:     "cyan",
-			text:      "INFO",
+			name:         "cyan color enabled",
+			enabled:      true,
+			color:        "cyan",
+			text:         "INFO",
 			wantContains: []string{"\033[36m", "INFO", "\033[0m"},
 		},
 		{

@@ -1,10 +1,14 @@
 # Core tooling directories
 .codex/
+AGENTS.md
+.claude/
+CLAUDE.md
 .specify/
 specs/
 
 # Go build artifacts
 bin/
+sysgreet
 *.test
 *.exe
 *.exe~

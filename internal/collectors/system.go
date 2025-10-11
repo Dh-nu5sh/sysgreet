@@ -78,22 +78,22 @@ type Snapshot struct {
 	LastLogin *LastLoginInfo
 }
 
-// SystemCollector defines host identity collection behaviour.
+// SystemCollector defines host identity collection behavior.
 type SystemCollector interface {
 	CollectSystem(ctx context.Context) (SystemInfo, error)
 }
 
-// NetworkCollector defines network snapshot behaviour.
+// NetworkCollector defines network snapshot behavior.
 type NetworkCollector interface {
 	CollectNetwork(ctx context.Context) (NetworkInfo, error)
 }
 
-// ResourceCollector defines resource metrics behaviour.
+// ResourceCollector defines resource metrics behavior.
 type ResourceCollector interface {
 	CollectResources(ctx context.Context) (ResourceInfo, error)
 }
 
-// SessionCollector defines remote session detection behaviour.
+// SessionCollector defines remote session detection behavior.
 type SessionCollector interface {
 	CollectSession(ctx context.Context) (SessionInfo, error)
 }
@@ -155,4 +155,54 @@ func (p Providers) Gather(ctx context.Context) Snapshot {
 
 func fmtSystem(dst *SystemInfo, src SystemInfo) {
 	*dst = src
+}
+
+// DemoSnapshot returns a realistic demo snapshot for screenshots and testing.
+func DemoSnapshot() Snapshot {
+	now := time.Now()
+	return Snapshot{
+		System: SystemInfo{
+			Hostname:    "sysgreet",
+			OS:          "Linux Server",
+			OSVersion:   "6.8.0",
+			Arch:        "x86_64",
+			Uptime:      4*24*time.Hour + 12*time.Hour + 33*time.Minute,
+			CurrentUser: "demo",
+			HomeDir:     "/home/demo",
+			Datetime:    now,
+		},
+		Network: NetworkInfo{
+			Primary: &Address{
+				IP:        "192.168.1.42",
+				Interface: "eth0",
+			},
+			Additional: []Address{
+				{IP: "10.8.0.2", Interface: "tun0"},
+			},
+		},
+		Session: SessionInfo{
+			RemoteAddr: "203.0.113.5",
+			Source:     "ssh",
+		},
+		Resources: ResourceInfo{
+			Memory: MemoryInfo{
+				Total:     16 * 1024 * 1024 * 1024,           // 16 GB
+				Available: 12*1024*1024*1024 + 300*1024*1024, // 12.3 GB
+			},
+			Disk: DiskInfo{
+				Total: 512 * 1024 * 1024 * 1024, // 512 GB
+				Used:  210 * 1024 * 1024 * 1024, // 210 GB
+			},
+			CPU: CPUInfo{
+				Load1:  0.45,
+				Load5:  0.52,
+				Load15: 0.60,
+				Mode:   "load",
+			},
+		},
+		LastLogin: &LastLoginInfo{
+			Timestamp: now.Add(-2 * time.Hour),
+			Source:    "203.0.113.10",
+		},
+	}
 }

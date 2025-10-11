@@ -1,5 +1,7 @@
 package config
 
+const SchemaVersion = "v1"
+
 // DisplayConfig controls section visibility in the banner.
 type DisplayConfig struct {
 	Hostname    bool `yaml:"hostname" toml:"hostname"`
@@ -17,9 +19,10 @@ type DisplayConfig struct {
 
 // ASCIIConfig controls hostname ASCII-art rendering.
 type ASCIIConfig struct {
-	Font       string `yaml:"font" toml:"font"`
-	Color      string `yaml:"color" toml:"color"`
-	Monochrome bool   `yaml:"monochrome" toml:"monochrome"`
+	Font       string   `yaml:"font" toml:"font"`
+	Color      string   `yaml:"color" toml:"color"`
+	Gradient   []string `yaml:"gradient,omitempty" toml:"gradient,omitempty"`
+	Monochrome bool     `yaml:"monochrome" toml:"monochrome"`
 }
 
 // LayoutConfig controls banner layout options.
@@ -34,12 +37,14 @@ type NetworkConfig struct {
 	MaxInterfaces      int  `yaml:"max_interfaces" toml:"max_interfaces"`
 }
 
-// Config is the root configuration for hostinfo.
+// Config is the root configuration for sysgreet.
 type Config struct {
-	Display DisplayConfig `yaml:"display" toml:"display"`
-	ASCII   ASCIIConfig   `yaml:"ascii" toml:"ascii"`
-	Layout  LayoutConfig  `yaml:"layout" toml:"layout"`
-	Network NetworkConfig `yaml:"network" toml:"network"`
+	Display   DisplayConfig `yaml:"display" toml:"display"`
+	ASCII     ASCIIConfig   `yaml:"ascii" toml:"ascii"`
+	Layout    LayoutConfig  `yaml:"layout" toml:"layout"`
+	Network   NetworkConfig `yaml:"network" toml:"network"`
+	Version   string        `yaml:"version" toml:"version"`
+	CreatedAt string        `yaml:"created_at" toml:"created_at"`
 }
 
 // Default returns the default configuration used when no config file is present.
@@ -59,8 +64,9 @@ func Default() Config {
 			LastLogin:   true,
 		},
 		ASCII: ASCIIConfig{
-			Font:       "random",
-			Color:      "random",
+			Font:       "ANSI Regular",
+			Color:      "",
+			Gradient:   []string{"brightblue", "blue", "cyan", "brightcyan", "white"},
 			Monochrome: false,
 		},
 		Layout: LayoutConfig{
@@ -71,5 +77,7 @@ func Default() Config {
 			ShowInterfaceNames: true,
 			MaxInterfaces:      3,
 		},
+		Version:   SchemaVersion,
+		CreatedAt: "",
 	}
 }

@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/veteranbv/hostinfo/internal/ascii"
-	"github.com/veteranbv/hostinfo/internal/collectors"
-	"github.com/veteranbv/hostinfo/internal/config"
+	"github.com/veteranbv/sysgreet/internal/ascii"
+	"github.com/veteranbv/sysgreet/internal/collectors"
+	"github.com/veteranbv/sysgreet/internal/config"
 )
 
 func TestNew(t *testing.T) {
@@ -185,7 +185,7 @@ func TestBanner_buildHeader(t *testing.T) {
 			hostname:     "",
 			os:           "Linux",
 			displayOS:    true,
-			wantHostname: "hostinfo",
+			wantHostname: "sysgreet",
 			wantLines:    1,
 		},
 		{
@@ -193,7 +193,7 @@ func TestBanner_buildHeader(t *testing.T) {
 			hostname:     "   ",
 			os:           "Linux",
 			displayOS:    true,
-			wantHostname: "hostinfo",
+			wantHostname: "sysgreet",
 			wantLines:    1,
 		},
 		{

@@ -19,7 +19,7 @@ linters:
     - goconst
     - gocyclo
     - gosec
-    - exportloopref
+    - copyloopvar
 
 linters-settings:
   gocyclo:

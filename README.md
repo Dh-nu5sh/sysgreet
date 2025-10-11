@@ -1,8 +1,10 @@
-# Hostinfo
+# Sysgreet
 
 > Beautiful, low-latency system context for every terminal login.
 
-Hostinfo keeps you oriented the moment a shell prompt appears. It prints the
+![Sysgreet](media/sysgreet-padded.png)
+
+Sysgreet keeps you oriented the moment a shell prompt appears. It prints the
 hostname in ASCII art alongside a curated snapshot of operating system,
 network, and resource telemetry—so you always know **which** machine you are on
 and **whether** it is healthy. Built for managing home labs and fleets alike, it
@@ -11,9 +13,9 @@ and Windows.
 
 ---
 
-## Why Hostinfo exists
+## Why Sysgreet exists
 
-I created Hostinfo while operating a growing home lab and juggling
+I created Sysgreet while operating a growing home lab and juggling
 multiple SSH sessions. I wanted a professional banner—_not_ a novelty—that
 instantly answered three questions:
 
@@ -21,7 +23,7 @@ instantly answered three questions:
 2. **Is this host behaving?** (Uptime, memory, disk, CPU trends)
 3. **What network path am I on?** (Primary route, relevant secondary interfaces)
 
-Hostinfo delivers those answers in under 50 ms without calling out to the
+Sysgreet delivers those answers in under 50 ms without calling out to the
 network or depending on external runtimes.
 
 ---
@@ -39,8 +41,8 @@ network or depending on external runtimes.
   the banner keeps rendering.
 - **Performance-guarded** – Startup benchmark (<50 ms median, <80 ms p95) runs in
   CI; process RSS stays <15 MB.
-- **Professional aesthetics** – Embedded FIGlet fonts, ANSI color with automatic
-  monochrome fallback, 80-column mindful layout.
+- **Professional aesthetics** – Unicode block fonts with gradient colors,
+  automatic monochrome fallback, 80-column mindful layout.
 
 ---
 
@@ -50,10 +52,10 @@ network or depending on external runtimes.
 
 ```bash
 # Via Go (requires Go 1.22+)
-go install github.com/veteranbv/hostinfo/cmd/hostinfo@latest
+go install github.com/veteranbv/sysgreet/cmd/sysgreet@latest
 
 # Or download a release artifact (Linux/macOS/Windows, amd64 & arm64)
-# https://github.com/veteranbv/hostinfo/releases
+# https://github.com/veteranbv/sysgreet/releases
 ```
 
 > _Tip:_ The binary runs entirely offline. Copy it between hosts without
@@ -63,32 +65,42 @@ go install github.com/veteranbv/hostinfo/cmd/hostinfo@latest
 
 | Shell            | Snippet                                                                                       |
 |------------------|------------------------------------------------------------------------------------------------|
-| Bash / Zsh       | `echo 'hostinfo' >> ~/.bashrc` (or `~/.zshrc`)                                                 |
-| Fish             | `echo 'hostinfo' >> ~/.config/fish/config.fish`                                               |
-| PowerShell       | `Add-Content $PROFILE 'hostinfo'`                                                             |
-| Windows Terminal | Add `hostinfo` to your profile script so it runs after each session attaches                  |
-| SSH `ForceCommand` | `ForceCommand /usr/local/bin/hostinfo && /bin/bash` (keeps banner even when no profile runs) |
+| Bash / Zsh       | `echo 'sysgreet' >> ~/.bashrc` (or `~/.zshrc`)                                                 |
+| Fish             | `echo 'sysgreet' >> ~/.config/fish/config.fish`                                               |
+| PowerShell       | `Add-Content $PROFILE 'sysgreet'`                                                             |
+| Windows Terminal | Add `sysgreet` to your profile script so it runs after each session attaches                  |
+| SSH `ForceCommand` | `ForceCommand /usr/local/bin/sysgreet && /bin/bash` (keeps banner even when no profile runs) |
 
-Need to silence the banner temporarily? Use `hostinfo --disable` in CI jobs or
-scripts that call the shell non-interactively.
+**Special modes:**
+
+```bash
+# Demo mode - show 'SYSGREET' with fake data (perfect for screenshots)
+sysgreet --demo
+
+# Text mode - render custom ASCII art
+sysgreet --text "Production DB"
+
+# Disable output (useful in CI/scripts)
+sysgreet --disable
+```
 
 ---
 
 ## Configuration (optional)
 
-Hostinfo looks for configuration in this order:
+Sysgreet looks for configuration in this order:
 
-1. `HOSTINFO_CONFIG` environment variable (absolute or `~/` paths)
-2. `~/.config/hostinfo/config.yaml` (or `.yml`, `.toml`)
-3. `~/.hostinfo.yaml` / `.toml`
+1. `SYSGREET_CONFIG` environment variable (absolute or `~/` paths)
+2. `~/.config/sysgreet/config.yaml` (or `.yml`, `.toml`)
+3. `~/.sysgreet.yaml` / `.toml`
 
 Example YAML:
 
 ```yaml
-# ~/.config/hostinfo/config.yaml
+# ~/.config/sysgreet/config.yaml
 ascii:
-  font: "slant"
-  color: "cyan"
+  font: "ANSI Regular"
+  gradient: ["brightblue", "blue", "cyan", "brightcyan", "white"]
   monochrome: false
 
 display:
@@ -114,38 +126,22 @@ network:
 ```
 
 Environment variables override everything (e.g.
-`HOSTINFO_DISPLAY_MEMORY=false`, `HOSTINFO_ASCII_FONT=standard`). See
+`SYSGREET_DISPLAY_MEMORY=false`, `SYSGREET_ASCII_FONT=standard`). See
 [`configs/example.yaml`](configs/example.yaml) and
 [`configs/example.toml`](configs/example.toml) for full references.
+
+### Bootstrap behaviour
+
+- First run: sysgreet writes `~/.config/sysgreet/config.yaml` with curated defaults (all sections enabled, `ANSI Regular` font with blue-to-white gradient, metadata fields `created_at` and `version`).
+- Existing config: the CLI prompts `[K]eep/[O]verwrite/[C]ancel` by default and stores a timestamped `.bak` when you choose overwrite.
+- Non-interactive automation: use `--config-policy` or `SYSGREET_CONFIG_POLICY` to choose `prompt`, `keep`, or `overwrite`. When stdin is not a TTY (e.g. CI jobs), an explicit policy is required.
+- Flags beat environment variables so scripts can override fleet defaults (`SYSGREET_CONFIG_POLICY=overwrite bin/sysgreet --config-policy=keep`).
 
 ---
 
 ## What the banner shows
 
-```ascii
- _   _           _   _        __ _
-| | | | ___  ___| |_(_) ___  / _(_) __ _ _ __ ___
-| |_| |/ _ \/ __| __| |/ __|| |_| |/ _` | '_ ` _ \
-|  _  |  __/\__ \ |_| | (__ |  _| | (_| | | | | | |
-|_| |_|\___||___/\__|_|\___||_| |_|\__,_|_| |_| |_|
-
-Linux 6.8.0 (x86_64)
-
-System
-  Uptime: 4d 12h 33m
-  User: alice /home/alice
-  Time: Fri, 10 Oct 2025 09:45:00 PDT
-
-Network
-  Primary: 192.168.1.42 (en0)
-  Secondary: 10.8.0.2 (utun2)
-  Remote: 203.0.113.5
-
-Resources
-  Mem: 12.3GB free / 16.0GB (23% used)
-  Disk: 210.0GB used / 512.0GB (41% used)
-  CPU Load: 0.45 0.52 0.60
-```
+![Demo output](media/demo.jpg)
 
 - **System** – Hostname (ASCII art), OS name/version, architecture, uptime,
   active user + home, current time, last login when available.
@@ -167,7 +163,7 @@ Resources
 - **Runtime memory** – `< 15 MB` RSS for default banner
 - **No network activity** – All data collected locally, offline-safe
 
-Enable `HOSTINFO_DEBUG=1` to log collector errors without interrupting output.
+Enable `SYSGREET_DEBUG=1` to log collector errors without interrupting output.
 
 ---
 
@@ -178,8 +174,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed development guidelines, code
 **Quick start:**
 
 ```bash
-git clone https://github.com/veteranbv/hostinfo.git
-cd hostinfo
+git clone https://github.com/veteranbv/sysgreet.git
+cd sysgreet
 go mod tidy
 make test
 make bench
@@ -205,7 +201,7 @@ platform-specific improvements before diving in.
   detection, integration tests, and validates startup performance (<80ms p95).
 - Releases use GoReleaser (`.goreleaser.yml`) to ship signed binaries for
   Linux/macOS (amd64/arm64) and Windows (amd64), plus checksums.
-- `go install github.com/veteranbv/hostinfo@VERSION` is validated during the
+- `go install github.com/veteranbv/sysgreet@VERSION` is validated during the
   release workflow.
 
 ---
@@ -217,13 +213,13 @@ platform-specific improvements before diving in.
 - Pluggable section framework (e.g., Kubernetes context, vault status)
 - Prebuilt Windows installer for enterprise onboarding
 
-Ideas welcome—open a discussion if a feature would make Hostinfo more useful for
+Ideas welcome—open a discussion if a feature would make Sysgreet more useful for
 your fleet.
 
 ---
 
 ## License
 
-Hostinfo is licensed under the [Apache License 2.0](LICENSE).
+Sysgreet is licensed under the [Apache License 2.0](LICENSE).
 
 Copyright © 2025 Henry Sowell

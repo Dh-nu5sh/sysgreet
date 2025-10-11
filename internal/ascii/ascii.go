@@ -6,6 +6,7 @@ import "strings"
 type RenderOptions struct {
 	Font       string
 	Color      string
+	Gradient   []string
 	Monochrome bool
 	Uppercase  bool
 }
@@ -14,10 +15,10 @@ type RenderOptions struct {
 func (r *Renderer) RenderHostname(hostname string, opts RenderOptions) (string, string, string, error) {
 	text := strings.TrimSpace(hostname)
 	if text == "" {
-		text = "hostinfo"
+		text = "sysgreet"
 	}
 	if opts.Uppercase {
 		text = strings.ToUpper(text)
 	}
-	return r.Render(text, opts.Font, opts.Color, opts.Monochrome)
+	return r.RenderWithGradient(text, opts.Font, opts.Color, opts.Gradient, opts.Monochrome)
 }

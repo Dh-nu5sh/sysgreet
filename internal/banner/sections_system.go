@@ -5,8 +5,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/veteranbv/hostinfo/internal/collectors"
-	"github.com/veteranbv/hostinfo/internal/config"
+	"github.com/veteranbv/sysgreet/internal/collectors"
+	"github.com/veteranbv/sysgreet/internal/config"
 )
 
 // SystemSectionBuilder renders uptime, user, datetime, and last-login information.

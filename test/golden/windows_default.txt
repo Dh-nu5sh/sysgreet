@@ -1,4 +1,4 @@
-HOSTINFO
+SYSGREET
 System
   Uptime: 1d 6h 15m
   User: Administrator C:\\Users\\Administrator

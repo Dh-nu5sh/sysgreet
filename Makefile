@@ -22,10 +22,10 @@ bench:
 	CGO_ENABLED=0 go test -bench . ./test/benchmarks
 
 build:
-	CGO_ENABLED=0 go build -o hostinfo ./cmd/hostinfo
+	CGO_ENABLED=0 go build -o sysgreet ./cmd/sysgreet
 
 clean:
-	rm -f hostinfo coverage.out
+	rm -f sysgreet coverage.out
 
 help:
 	@echo "Available targets:"
@@ -35,6 +35,6 @@ help:
 	@echo "  test-verbose   - Run all tests with verbose output"
 	@echo "  test-coverage  - Run tests with coverage report"
 	@echo "  bench          - Run performance benchmarks"
-	@echo "  build          - Build the hostinfo binary"
+	@echo "  build          - Build the sysgreet binary"
 	@echo "  clean          - Remove build artifacts"
 	@echo "  help           - Show this help message"
